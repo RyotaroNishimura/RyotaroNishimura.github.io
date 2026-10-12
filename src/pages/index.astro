@@ -214,7 +214,20 @@ const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')
   {/* ── 5 経歴 ───────────────────────────── */}
   <section class="wrap section section--tight" id="経歴">
     <p class="section-label">経歴</p>
-    <h2>{氏名}</h2>
+    <div class="profile-head">
+      {/* 写真は 2026-10-12 に本人から受け取った物。胸の社名ロゴが入らない位置で切り抜き、メタデータを消して書き出した */}
+      <img
+        class="profile-photo"
+        src="/profile-320.webp"
+        srcset="/profile-320.webp 1x, /profile-640.webp 2x"
+        width="96"
+        height="96"
+        alt={氏名}
+        loading="lazy"
+        decoding="async"
+      />
+      <h2>{氏名}</h2>
+    </div>
 
     <ol class="career">
       {経歴.map((c) => (

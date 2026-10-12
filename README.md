@@ -1,5 +1,7 @@
 # 西村 涼太郎 — 毎朝、AIが数字を取り、判断し、公開する。人は承認だけ。
 
+<img src="public/profile-640.webp" width="160" height="160" alt="西村 涼太郎">
+
 この仕組みを自社で動かしている営業出身者が、あなたの業務で同じものを作ります。
 
 - サイト: https://ryotaronishimura.github.io

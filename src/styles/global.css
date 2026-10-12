@@ -1066,3 +1066,25 @@ a.mail {
 .factgrid dd {
   margin: 0;
 }
+
+/* 経歴の頭の顔写真（2026-10-12 追加）。丸く切り、氏名の左に並べる */
+.profile-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-head h2 {
+  margin: 0;
+}
+
+.profile-photo {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: var(--bg-sub);
+}
