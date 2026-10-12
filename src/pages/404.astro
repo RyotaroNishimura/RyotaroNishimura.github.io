@@ -1,0 +1,35 @@
+---
+/**
+ * 404。Astro 既定の英語ページだと、人脈共有のURLを打ち間違えて着いた人が
+ * 「閉じたサイト」だと思って離脱する（御堂レビュー L4）。
+ * 戻り先とCTAだけ置く。検索には出さない。
+ */
+import Base from '../layouts/Base.astro';
+import { CTA文言, CTAパス } from '../config/サイト設定';
+import { 実績一覧 } from '../config/実績';
+---
+
+<Base
+  title="ページが見つかりません"
+  description="お探しのページが見つかりませんでした。"
+  noindex={true}
+>
+  <div class="wrap doc" style="max-width:34rem">
+    <h1>ページが見つかりません</h1>
+    <p>
+      URL が変わったか、打ち間違いかもしれません。
+      お探しの内容は、たいていこのどれかです。
+    </p>
+    <ul>
+      <li><a href="/">トップ（進め方・品質基準・お引き受けする範囲）</a></li>
+      <li><a href="/works/">実績 {実績一覧.length}本</a></li>
+      <li><a href="/process/">このサイトはこう作った</a></li>
+      <li><a href="/legal/">運営者情報</a></li>
+    </ul>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="404">{CTA文言}</a>
+    </div>
+    <a class="back-link" href="/">← トップに戻る</a>
+  </div>
+</Base>

@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import { 実績一覧 } from '../../config/実績';
+import { CTA文言, CTAパス } from '../../config/サイト設定';
+
+const 数 = (種別: string) => 実績一覧.filter((x) => x.種別.startsWith(種別)).length;
+---
+
+<Base
+  title={`実績 — 企画から公開まで1人でやった${実績一覧.length}本`}
+  description={`App Store で公開中のアプリ${数('iOS')}本、毎日動かしている情報サイト${数('情報サイト')}本、自分で使っている業務アプリ${数('Web アプリ')}本、そしてこのサイト。数字は全て公開元から取り直した実測です。`}
+>
+  <div class="wrap doc">
+    <p class="crumb"><a href="/">トップ</a> ／ 実績</p>
+    <h1>実績</h1>
+    <p class="meta">企画から公開まで1人でやった{実績一覧.length}本（2026-10-12 時点）</p>
+    <p>
+      受託の仕事の実績はまだありません。ここに並んでいるのは、全部自分で企画して自分で公開した物です。
+      リンクを載せている物は今も動いています。自社で運営している情報サイトは、サイト名とリンクを伏せて作り方と数字だけを載せています。数字は公開元から取り直したものだけを書いています。
+    </p>
+
+    <div class="works" style="margin-top:2rem">
+      {実績一覧.map((w) => (
+        <article class="work">
+          <h3><a href={`/works/${w.slug}/`} data-ga="works_click" data-item={w.slug}>{w.名前}</a></h3>
+          <p class="kind">{w.種別}</p>
+          <p>{w.課題}</p>
+          <ul class="facts">{w.結果.map((f) => <li>{f}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="works-index">{CTA文言}</a>
+    </div>
+    <a class="back-link" href="/">← トップに戻る</a>
+  </div>
+</Base>

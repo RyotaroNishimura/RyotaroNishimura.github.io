@@ -1,0 +1,190 @@
+---
+/**
+ * /process — 制作ログの公開版。
+ *
+ * このページが「自分で作った」を受注根拠に変換する中核（御堂ゲート §3）。
+ * 作り方の説明ではなく、判断の記録を置く。判断には全部 日付 を付ける。
+ * 原稿の正本は personal_brand/ポートフォリオサイト/制作ログ.md。
+ */
+import Base from '../layouts/Base.astro';
+import { 工程, Lighthouse実測 } from '../config/本文';
+import { CTA文言, CTAパス } from '../config/サイト設定';
+import { 実測値 } from '../config/実測';
+---
+
+<Base
+  title="このサイトはこう作った — 工程と、その場でした判断の記録"
+  description="このポートフォリオサイトを作った工程の記録です。かかった時間、判断した内容と日付、Lighthouse の実測値、ページの重さを全部出しています。"
+>
+  <div class="wrap doc">
+    <p class="crumb"><a href="/">トップ</a> ／ このサイトの作り方</p>
+    <h1>このサイトはこう作った</h1>
+    <p class="meta">着手 2026-09-20 ／ 最終更新 2026-10-12</p>
+
+    <p>
+      制作会社を選ぶときに見たいのは、完成したサイトの見た目より「どこで迷って、何を選んだか」だと思っています。
+      人に見せるために後から書いた紹介文ではなく、作っている最中に書いた記録をそのまま出します。
+    </p>
+    <p class="small">
+      この記録の元になっているファイルは、手元で工程ごとに書き足しています。
+      最後にまとめて書いたものではありません。
+    </p>
+
+    <h2>1. 工程とかかった時間</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">工程</th><th scope="col">時間</th>
+            <th scope="col">ここで決めたこと</th><th scope="col">使ったもの</th>
+          </tr>
+        </thead>
+        <tbody>
+          {工程.map((k) => (
+            <tr><td class="nowrap">{k.名前}</td><td class="nowrap">{k.時間}</td><td>{k.判断}</td><td>{k.道具}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>2. 判断の記録</h2>
+
+    <div class="logbox">
+      <p class="date">2026-09-20 ／ 要件定義</p>
+      <p>
+        <b>判断①：実績を8本から7本に減らした。</b><br />
+        載せる予定だったサイトが1本あった。着手は決まっていたが、URLを叩いたら到達しなかった（HTTP 000）。
+        手元にリポジトリも無い。
+      </p>
+      <p>
+        「サイト3本」と書けば数字は大きくなる。ただ、このサイトを見る人は制作を頼むかどうかを決める人なので、
+        リンクを踏んで確かめる。踏んで繋がらなかった時点で、他の6本も疑われる。
+        数字を1つ増やす価値より、残り6本の信用のほうが高い。<br />
+        <b>→ 実績から落とし、「サイト2本」に直した。</b>
+      </p>
+    </div>
+
+    <div class="logbox" style="margin-top:1rem">
+      <p class="date">2026-09-20 ／ 要件定義</p>
+      <p>
+        <b>判断②：公開日を、社内の記録ではなく Apple の記録に合わせた。</b><br />
+        アプリ2本の公開日が、自分のメモでは 2026-07-17、Apple の公開データでは 2026-07-16 だった。1日ずれている。
+      </p>
+      <p>
+        サイトに載せる数字は、読んだ人が自分で確かめられるものであるべきだと考えた。
+        自分のメモは誰にも検算できないが、Apple のデータは誰でも引ける。<br />
+        <b>→ Apple 側の 7/16 を採用した。</b>この2本の公開日は、いま検算しても合う。
+      </p>
+    </div>
+
+    <div class="logbox" style="margin-top:1rem">
+      <p class="date">2026-09-20 ／ 設計</p>
+      <p>
+        <b>判断③：顔写真の枠を作らなかった。</b><br />
+        制作者の顔が出ているサイトのほうが選ばれやすい、という話は知っている。
+        ただ、この時点で使える自分の写真が無かった。
+      </p>
+      <p>
+        枠だけ先に作ると、埋めるためにフリー素材の人物写真を入れることになる。
+        あれを入れた瞬間、このサイトは「どこかで見たサイト」になる。<br />
+        <b>→ 枠ごと作らなかった。</b>写真が用意できた日に、プロフィールの位置へ足す。
+        それまでは、数字と実物へのリンクで持たせる。
+      </p>
+    </div>
+
+    <div class="logbox" style="margin-top:1rem">
+      <p class="date">2026-09-20 ／ 実装</p>
+      <p>
+        <b>判断④：画面に JavaScript のフレームワークを持ち込まなかった。</b><br />
+        アニメーションや切り替えを入れると、見栄えはよくなる。その代わりに、
+        開いた瞬間に出る速さが落ちる。
+      </p>
+      <p>
+        このサイトを最初に見るのは、共有されたリンクをスマホで開く人だと想定した。
+        電波が弱い場所で3秒待たされると、中身を読む前に閉じられる。<br />
+        <b>→ 静的な HTML として書き出し、動く部分は計測のためのコードだけにした。</b>
+        結果として、配信される JavaScript は {実測値.JS合計} になった。
+      </p>
+    </div>
+
+    <div class="logbox" style="margin-top:1rem">
+      <p class="date">2026-09-20 ／ 計測</p>
+      <p>
+        <b>判断⑤：自分の閲覧を数えない仕組みを、公開の前に入れた。</b><br />
+        自分で動作確認するたびに訪問者が1人増える。別のサイトで、28日間の訪問の8割が
+        自分の確認だったことがあった。そうなると、公開直後の数字が何も読めない。
+      </p>
+      <p>
+        <b>→ 本番のURL以外では計測を送らない仕組みと、自分の端末に印を付ける仕組みを、公開前に入れた。</b>
+        後から入れても、最初の2週間のデータは戻らない。
+      </p>
+    </div>
+
+    <h2>3. 実測した数字</h2>
+    <h3>Lighthouse（モバイル設定）</h3>
+    <ul class="scores">
+      {Lighthouse実測.map((s) => <li><b>{s.値}</b><small>{s.名前}</small></li>)}
+    </ul>
+    <p class="small" style="margin-top:0.75rem">
+      計測日 {実測値.Lighthouse計測日}。本番ビルドをローカルで配信し、モバイル設定で計測しました。
+      実行したコマンドは <code>{実測値.Lighthouseコマンド}</code> です。
+    </p>
+
+    <figure style="margin:1.5rem 0">
+      <img
+        src="/shots/lighthouse.webp"
+        width="1200"
+        height="140"
+        alt="Lighthouse のスコア表示。Performance・Accessibility・Best Practices・SEO がいずれも100"
+        loading="lazy"
+        decoding="async"
+        style="border:1px solid var(--line);border-radius:4px"
+      />
+      <figcaption class="faint" style="margin-top:0.5rem">
+        計測結果の画面（スコアの部分を切り出したもの。数値は加工していません）。
+        アドレスが <code>127.0.0.1</code> なのは、<b>本番と同じビルド成果物を手元で配信して測っている</b>ためです。
+        生のレポート（JSON・HTML）は手元に保存してあり、ご依頼いただければそのままお渡しします。
+      </figcaption>
+    </figure>
+
+    <h3>ページの重さ</h3>
+    <p class="small">{実測値.ビルド計測日} のビルドから数えた値です。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">項目</th><th scope="col">実測</th><th scope="col">自分に課した上限</th></tr></thead>
+        <tbody>
+          <tr><td>JavaScript の合計</td><td>{実測値.JS合計}</td><td>50KB</td></tr>
+          <tr><td>画像の合計</td><td>{実測値.画像合計}</td><td>1.5MB</td></tr>
+          <tr><td>Web フォント</td><td>{実測値.フォント}</td><td>2ファイル</td></tr>
+          <tr><td>書き出されたページ数</td><td>{実測値.ページ数}</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>4. 使ったもの</h2>
+    <ul>
+      <li><b>Astro</b>（静的サイトの書き出し）— 画面に JavaScript を残さずに書ける</li>
+      <li><b>GitHub Pages</b>（公開先）— 静的なファイルを置くだけで公開できる。サーバー費用が0円になる</li>
+      <li><b>Google アナリティクス 4 ／ Cloudflare Web Analytics</b>（計測）</li>
+      <li><b>X のダイレクトメッセージ</b>（相談の受け口）— 自前のフォームやデータベースを持たない</li>
+      <li><b>システムフォント</b> — Web フォントを読み込まない。表示が速く、費用も0円</li>
+    </ul>
+    <p>
+      実装の手を動かしているのは AI エージェントです。私がやっているのは、
+      何を作らないかを決めることと、出てきた物の数字が事実かを確かめることです。
+      上の判断①と②は、どちらも AI が出した内容をそのまま通さずに確かめた結果です。
+    </p>
+
+    <h2>5. これから直すところ</h2>
+    <ul>
+      <li>顔写真を用意して、プロフィールに足す</li>
+      <li>公開後30日の数字を見て、最初の画面の1文を決め直す</li>
+      <li>受託の実績ができたら、この工程の記録をその案件でも公開する</li>
+    </ul>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="process">{CTA文言}</a>
+    </div>
+    <a class="back-link" href="/">← トップに戻る</a>
+  </div>
+</Base>

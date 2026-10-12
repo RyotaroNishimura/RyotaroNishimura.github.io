@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import { 実績一覧 } from '../../config/実績';
+import { CTA文言, CTAパス } from '../../config/サイト設定';
+
+export function getStaticPaths() {
+  return 実績一覧.map((w) => ({ params: { slug: w.slug }, props: { w } }));
+}
+const { w } = Astro.props;
+---
+
+<Base
+  title={`${w.名前} — ${w.種別} ｜ 実績`}
+  description={`${w.名前}（${w.種別}）。${w.課題} ${w.期間}`}
+>
+  <div class="wrap doc">
+    <p class="crumb"><a href="/">トップ</a> ／ <a href="/works/">実績</a> ／ {w.名前}</p>
+    <h1>{w.名前}</h1>
+    <p class="meta">{w.種別}</p>
+
+    {w.画像 && (
+      <img
+        src={w.画像}
+        alt={w.画像alt}
+        width="1200"
+        height="750"
+        loading="lazy"
+        decoding="async"
+        style="border:1px solid var(--line);border-radius:4px"
+      />
+    )}
+
+    <div class="factgrid">
+      <div><span class="k">課題</span><span class="v">{w.課題}</span></div>
+      <div><span class="k">自分の役割</span><span class="v">{w.役割}</span></div>
+      <div><span class="k">期間</span><span class="v">{w.期間}</span></div>
+      <div>
+        <span class="k">結果</span>
+        <span class="v"><ul>{w.結果.map((f) => <li>{f}</li>)}</ul></span>
+      </div>
+      <div><span class="k">学んだこと</span><span class="v">{w.学び}</span></div>
+      {w.リンク && (
+        <div>
+          <span class="k">リンク</span>
+          <span class="v">
+            <a href={w.リンク} rel="noopener" target="_blank" data-ga="outbound_store" data-item={w.slug}>
+              {w.リンク文言}
+            </a>
+          </span>
+        </div>
+      )}
+    </div>
+
+    {w.設計意図.length > 0 && (
+      <>
+        <h2>なぜこの見た目・構成にしたか</h2>
+        <p class="small">
+          作っているときに決めたことを、決めた理由ごと書いています。
+          {w.設計意図.length < 3 && '（このプロダクトは、記録から根拠を出せた分だけ載せています）'}
+        </p>
+        <ol class="intents">
+          {w.設計意図.map((i) => (
+            <li>
+              <h3>{i.見出し}</h3>
+              <p>{i.本文}</p>
+            </li>
+          ))}
+        </ol>
+      </>
+    )}
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item={`works-${w.slug}`}>{CTA文言}</a>
+    </div>
+    <a class="back-link" href="/works/">← 実績一覧に戻る</a>
+  </div>
+</Base>

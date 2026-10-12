@@ -1,0 +1,313 @@
+---
+import Base from '../layouts/Base.astro';
+import {
+  氏名,
+  ハンドル,
+  Xリンク,
+  CTA文言,
+  CTAパス,
+  相談の案内,
+  料金の扱い,
+  含む,
+  含まない,
+  返信時間,
+  診断納期,
+  公開日の約束,
+} from '../config/サイト設定';
+import { 実績一覧, 出荷サマリー } from '../config/実績';
+import { 工程, 最初に聞く10の質問, 品質基準, FAQ, Lighthouse実測 } from '../config/本文';
+
+const トップ実績 = 実績一覧.filter((x) => x.トップ掲載);
+const [アプリ数, サイト数, 業務アプリ数] = 出荷サマリー.map((s) => s.数);
+---
+
+<Base
+  title={`${氏名} — 戦略から公開まで、ひとりでやり切ります`}
+  description={`小さな会社の代表向けに、LP と小規模ホームページを1人で作ります。要件定義から公開、公開後の数値レポートまで同じ人が担当します。App Store のアプリ${アプリ数}本と自社サイト${サイト数}本を、企画から公開まで1人で作りました。`}
+>
+  {/* ── S1 ヒーロー ───────────────────────── */}
+  <section class="wrap hero">
+    <h1>小さな会社の代表へ。<br />戦略から公開まで、ひとりでやり切ります。</h1>
+    <p class="offer">
+      作るのは <b>LP 1枚</b> と <b>小規模ホームページ（5ページ以内）</b> の2つです。
+    </p>
+    <p class="promise">{公開日の約束}</p>
+    <p class="sub">
+      打ち合わせの相手は最後まで私1人です。営業の人と、実際に作る人が別、が起きません。
+      公開した日から、何人が来て何人が問い合わせたかが数字で見えます。
+    </p>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="hero">{CTA文言}</a>
+      <a class="btn btn-sub" href="#実績">実績を見る</a>
+    </div>
+    <p class="faint">相談は無料です。{相談の案内}。どこまでお引き受けするかは<a href="#範囲">このページの下に書いてあります</a>。</p>
+
+    <ul class="hero-proof">
+      {出荷サマリー.map((s) => (
+        <li>
+          <b>{s.数}<span>{s.単位}</span></b>
+          <small>{s.label}</small>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {/* ── S2 出荷実績 ──────────────────────── */}
+  <section class="wrap section" id="実績">
+    <p class="section-label">公開した物</p>
+    <h2>作った物は、全部そこにあります。</h2>
+    <p class="lead">
+      受託の実績はまだありません。代わりに、自分で企画して自分で公開した物を置きます。
+      リンクを載せている物は今も動いています。自社で運営している情報サイトは、サイト名とリンクを伏せて作り方と数字だけを載せています。数字は全て公開元から取り直した実測です。
+    </p>
+
+    <div class="works">
+      {トップ実績.map((w) => (
+        <article class="work">
+          {w.画像 && (
+            <a href={`/works/${w.slug}/`} data-ga="works_click" data-item={`${w.slug}-shot`}>
+              <img src={w.画像} alt={w.画像alt} width="1200" height="750" loading="lazy" decoding="async" />
+            </a>
+          )}
+          <h3><a href={`/works/${w.slug}/`} data-ga="works_click" data-item={w.slug}>{w.名前}</a></h3>
+          <p class="kind">{w.種別}</p>
+          <p>{w.課題}</p>
+          <ul class="facts">
+            {w.結果.slice(0, 2).map((f) => <li>{f}</li>)}
+          </ul>
+          {w.リンク && (
+            <p class="work-out">
+              <a href={w.リンク} rel="noopener" target="_blank" data-ga="outbound_store" data-item={w.slug}>
+                {w.リンク文言} ↗
+              </a>
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="works-after">{CTA文言}</a>
+      <a class="btn btn-sub" href="/works/" data-ga="works_click" data-item="index">実績{実績一覧.length}本の詳細を見る</a>
+    </div>
+  </section>
+
+  {/* ── S3 このサイトはこう作った ─────────────── */}
+  <section class="wrap section" id="作り方">
+    <p class="section-label">このサイトはこう作った</p>
+    <h2>完成品ではなく、途中の判断を見てください。</h2>
+    <p class="lead">
+      制作会社を選ぶときに見るべきなのは、きれいな完成物ではなく「どこで何を迷って、何を選んだか」だと思っています。
+      だからこのサイトは、作っている最中の記録をそのまま公開しています。
+    </p>
+
+    <ol class="steps">
+      {工程.map((k) => (
+        <li>
+          <h3>{k.名前}</h3>
+          <dl>
+            <dt>かかった時間</dt>
+            <dd>{k.時間}</dd>
+            <dt>ここで決めたこと</dt>
+            <dd>{k.判断}</dd>
+            <dt>使ったもの</dt>
+            <dd>{k.道具}</dd>
+          </dl>
+        </li>
+      ))}
+    </ol>
+
+    <h3 style="margin-top:2rem">実測した数字</h3>
+    <ul class="scores">
+      {Lighthouse実測.map((s) => (
+        <li><b>{s.値}</b><small>{s.名前}</small></li>
+      ))}
+    </ul>
+    <p class="faint" style="margin-top:0.6rem">
+      Lighthouse をモバイル設定で本番ビルドに対して実行した実測値です。測定日と実行コマンドは /process に載せています。
+    </p>
+
+    <p class="small">
+      私は、作ったものを実際に世に出すところまでを「<b>出荷</b>」と呼んでいます。
+      動くものが人の手元に届いて、はじめて1本と数えます。
+    </p>
+
+    <div class="evidence">
+      <div class="logbox">
+        <p class="date">制作ログ.md 2026-09-20 ／ 要件定義</p>
+        <p><b>判断①：実績を1本減らした。</b></p>
+        <p>
+          載せる予定だったサイトが1本、URLを叩いたら到達しなかった。
+          着手は決めていたけれど、出荷物が無い。<br />
+          載せれば「3本」と書けるけれど、検算されたら終わる。<br />
+          <b>→ 実績から落として「2本」にした。</b>
+        </p>
+      </div>
+      <div class="logbox">
+        <p class="date">制作ログ.md 2026-09-20 ／ 要件定義</p>
+        <p><b>判断②：自分のメモより Apple の記録を採った。</b></p>
+        <p>
+          アプリ2本の公開日が、社内の記録では 7/17、Apple の公開データでは 7/16 だった。
+          1日ずれている。<br />
+          <b>→ 第三者が確かめられるほうにそろえた。</b>
+        </p>
+      </div>
+    </div>
+
+    <p style="margin-top:1.5rem">
+      実装そのものは AI エージェントに任せています。私がやるのは、何を作らないと決めるところと、出た物が事実かを確かめるところです。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="process-after">{CTA文言}</a>
+      <a class="btn btn-sub" href="/process/">工程の全文を読む</a>
+    </div>
+    <p class="faint">同じやり方で、あなたのサイトも作ります。</p>
+  </section>
+
+  {/* ── S4 進め方と最初に聞くこと ──────────────── */}
+  <section class="wrap section" id="進め方">
+    <p class="section-label">進め方</p>
+    <h2>頼んだあと、何が起きるか。</h2>
+
+    <p class="faint" id="工程表の注記">
+      期間は目安です。確定は要件定義が終わった時点でお出しします。
+    </p>
+    <div class="table-scroll table-scroll--fit">
+      <table aria-describedby="工程表の注記">
+        <thead>
+          <tr><th scope="col">工程</th><th scope="col">期間の目安</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>要件定義</td><td class="nowrap">1週間</td></tr>
+          <tr><td>設計</td><td class="nowrap">1週間</td></tr>
+          <tr><td>実装</td><td class="nowrap">1〜2週間</td></tr>
+          <tr><td>公開・計測</td><td class="nowrap">1週間</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="deliverables">
+      <dt>要件定義で出す物</dt>
+      <dd>下の10の質問への回答をまとめた要件メモ</dd>
+      <dt>設計で出す物</dt>
+      <dd>ページ構成・各セクションで言うこと・本文の下書き</dd>
+      <dt>実装で出す物</dt>
+      <dd>本番と同じ状態で動くプレビューURL</dd>
+      <dt>公開・計測で出す物</dt>
+      <dd>公開作業・計測の設置・スマホ実機での確認</dd>
+    </dl>
+
+    <h3 id="10の質問">最初に聞く10の質問</h3>
+    <p class="lead">
+      最初の打ち合わせで、この10個を聞きます。先に見えていたほうが準備しやすいはずなので出しておきます。
+      答えが決まっていなくても構いません。決まっていない場所こそ、一緒に決める場所です。
+    </p>
+    <ol class="qlist">
+      {最初に聞く10の質問.map((q) => <li>{q}</li>)}
+    </ol>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="questions">{CTA文言}</a>
+    </div>
+    <p class="faint">この10個を一緒に埋めるところから始めます。</p>
+  </section>
+
+  {/* ── S5 品質基準 ──────────────────────── */}
+  <section class="wrap section section--tight" id="品質基準">
+    <p class="section-label">引き渡しの条件</p>
+    <h2>これを満たしたときだけ、納品と呼びます。</h2>
+    <p class="lead">
+      「完成しました」の中身は会社によって違います。私の場合はここに書いた8つで、
+      1つでも欠けていたら引き渡しません。このサイト自身も同じ基準で作っています。
+    </p>
+    <ul class="checks">
+      {品質基準.map((c) => <li>{c}</li>)}
+    </ul>
+  </section>
+
+  {/* ── S6 お引き受けする範囲 ─────────────────── */}
+  {/* 料金はサイトに載せない（2026-10-12 オーナー回答）。作業範囲だけを価格なしで残す */}
+  <section class="wrap section section--wide" id="範囲">
+    <p class="section-label">お引き受けする範囲</p>
+    <h2>どこまでやるかを先に書きます。</h2>
+
+    <div class="scope">
+      <div>
+        <h3>含むもの</h3>
+        <ul>{含む.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div>
+        <h3>含まないもの</h3>
+        <ul>{含まない.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="scope">{CTA文言}</a>
+    </div>
+    <p class="faint">{料金の扱い}</p>
+  </section>
+
+  {/* ── S7 プロフィール ───────────────────── */}
+  <section class="wrap section section--tight" id="私について">
+    <p class="section-label">担当者</p>
+    <h2>営業も設計も実装も、同じ人がやります。</h2>
+
+    <div class="profile">
+      <p>
+        <b>{氏名}</b>（X: <a href={Xリンク} rel="noopener" target="_blank">{ハンドル}</a>）
+      </p>
+      <p class="small">note でも記事を書いています。</p>
+      <p class="small">
+        自分で企画した物を自分で公開するところまでやってきました。
+        App Store に{アプリ数}本、自分で毎日動かしている情報サイトが{サイト数}本、自分の営業に使っている業務アプリが{業務アプリ数}本あります。
+        全部、企画から公開まで1人です。
+      </p>
+      <dl>
+        <dt>やること</dt>
+        <dd>要件定義・構成・本文・実装・公開・計測の設置</dd>
+        <dt>やらないこと</dt>
+        <dd>写真撮影・動画制作・広告運用（できる人を紹介します）</dd>
+        <dt>連絡</dt>
+        <dd>X の DM から（プロフィールのメッセージボタン）。{返信時間}に返信します</dd>
+        <dt>同時に受ける数</dt>
+        <dd>2件まで。3件目は着手日をお伝えしてお待ちいただきます</dd>
+      </dl>
+    </div>
+  </section>
+
+  {/* ── S8 FAQ ──────────────────────────── */}
+  <section class="wrap section section--tight" id="よくある質問">
+    <p class="section-label">よくある質問</p>
+    <h2>先に答えておきます。</h2>
+    <div class="faq">
+      {FAQ.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer" set:html={f.a} />
+        </details>
+      ))}
+    </div>
+  </section>
+
+  {/* ── S9 CTA 再掲 ──────────────────────── */}
+  <section class="wrap section" id="相談">
+    <div class="cta-final">
+      <h2>まず、今のサイトを見せてください。</h2>
+      <p class="small">
+        今あるサイトのどこで人が止まっているかを見て、直す場所を1枚にまとめて返します。
+        そのまま他の人に頼んでもらっても構いません。
+      </p>
+      <div class="btn-row">
+        <a class="btn" href={CTAパス} data-ga="cta_click" data-item="footer">{CTA文言}</a>
+      </div>
+      <ul>
+        <li>X の DM で受けています。{相談の案内}</li>
+        <li>DM には、今のサイトのURLと、困っていることを1行書いてください</li>
+        <li>{返信時間}に返信します</li>
+        <li>相談のあと{診断納期}に、今のサイトの診断を1枚で返します</li>
+        <li>その場で契約をお願いすることはありません</li>
+      </ul>
+    </div>
+  </section>
+</Base>

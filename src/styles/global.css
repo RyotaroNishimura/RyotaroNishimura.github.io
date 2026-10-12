@@ -1,0 +1,1072 @@
+/*
+  白基調・アクセント1色。ダーク基調は採用しない（御堂ゲート §3）。
+  ダークモード対応も工数優先で入れないが、色はトークンにしてあるので
+  :root の値を差し替えれば全体が変わる。
+
+  装飾は足さない。余白と罫線と、実物のスクリーンショットで持たせる。
+  グラデ背景・均一なカードグリッド・影の重ねがけはテンプレ感になるので使わない。
+*/
+
+:root {
+  /* 地と文字 */
+  --bg: #ffffff;
+  --bg-sub: #f6f5f2;
+  --ink: #1a1a1a;
+  --ink-sub: #55514c;
+  /*
+    #7a756e だと 12px のときに薄い地（--bg-sub #f6f5f2）の上で 4.18:1 しか出ず、
+    Lighthouse の color-contrast で落ちた（2026-09-20 実測）。4.5:1 を超える値まで落とす。
+    白地 6.04:1 / 薄い地 5.54:1。
+  */
+  --ink-faint: #67625b;
+  --line: #e2ded7;
+  /*
+    枠線・下線用。#c9c3ba は白地で 1.75:1 しか無く、背景が透明な副ボタン（.btn-sub）は
+    「ボタンだと分かる唯一の手がかり」がこの線なので、WCAG 1.4.11（非テキスト 3:1）に届いていなかった。
+    Lighthouse の color-contrast はテキストしか見ないので 100 でも検出されない。
+    白地 3.28:1 / 薄い地 3.01:1 まで濃くする。
+  */
+  --line-strong: #948d84;
+
+  /* アクセント1色。白地とのコントラスト比 7.4:1（本文サイズでも AA を超える） */
+  --accent: #0f5c4d;
+  --accent-ink: #ffffff;
+  --accent-faint: #eaf2ef;
+
+  /* 文字 */
+  --font: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP',
+    system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'SF Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* 寸法 */
+  --wrap: 62rem;
+  --gap: 1.5rem;
+  --radius: 4px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  /* 375px で横スクロールを出さない最後の砦 */
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  font-weight: 700;
+  margin: 0;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  margin: 0 0 1em;
+  padding-left: 1.3em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}
+
+/* ── 枠 ───────────────────────────────── */
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.section {
+  padding-block: 3.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.section:first-of-type {
+  border-top: 0;
+}
+
+/*
+  8セクションが全部 56px・同じ罫線・同じ見出しサイズだと、
+  どこを読んでいるか分からない等速スクロールになる。
+  装飾を足さずに、余白と地の色だけで章の切れ目を作る。
+*/
+.section--tight {
+  padding-block: 2.5rem;
+}
+
+.section--wide {
+  padding-block: 5rem;
+  background: var(--bg-sub);
+}
+
+.section-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  color: var(--ink-sub);
+  max-width: 44rem;
+}
+
+.small {
+  font-size: 0.875rem;
+  color: var(--ink-sub);
+}
+
+.faint {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+}
+
+/* ── ヘッダ・フッタ ──────────────────────── */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 10;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+/*
+  トップは 8,500px 以上ある。本文のCTAの間でも入口が要るので、ヘッダーを上に貼り付ける。
+  モバイルはヘッダーが2段に折れて画面を食うので、固定するのは1段に収まる幅からにする。
+*/
+@media (min-width: 46rem) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+  flex-wrap: wrap;
+}
+
+.site-title {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.9375rem;
+}
+
+.site-title span {
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-left: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.1rem;
+  font-size: 0.875rem;
+}
+
+.site-nav a {
+  color: var(--ink-sub);
+  text-decoration: none;
+  /* ヘッダーは min-height 60px なので、44px を確保しても見た目は変わらない */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current='page'] {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/*
+  全ページに常時ある導線。トップは縦 12,000px 近くあり、
+  本文のCTA（ヒーロー・実績後・依頼範囲・末尾）の間でもここから入れるようにしておく。
+*/
+.nav-cta {
+  background: var(--accent);
+  color: var(--accent-ink) !important;
+  padding: 0 0.9rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  min-height: 40px;
+}
+
+.nav-cta:hover {
+  background: #0b4a3e;
+  text-decoration: none !important;
+}
+
+/*
+  狭い画面ではヘッダーのCTAを出さない。本文側に6箇所あるので足りる。
+  セレクタを .site-nav .nav-cta にしているのは、.site-nav a（詳細度 0,1,1）の
+  display: inline-flex に .nav-cta（0,1,0）が負けて消えなかったため（375px 実測で確認）。
+*/
+@media (max-width: 34rem) {
+  .site-nav .nav-cta {
+    display: none;
+  }
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: 2.5rem;
+  margin-top: 3rem;
+  font-size: 0.875rem;
+  color: var(--ink-sub);
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.site-footer nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ── ボタン ──────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.5rem 1.6rem;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 2px solid var(--accent);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.btn:hover {
+  background: #0b4a3e;
+  border-color: #0b4a3e;
+}
+
+.btn-sub {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--line-strong);
+  font-weight: 600;
+}
+
+.btn-sub:hover {
+  background: var(--accent-faint);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+/* 段落に単独で置く導線リンク。指で押せる高さを確保する（本文中のリンクには使わない） */
+.link-block {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ── ヒーロー ─────────────────────────── */
+
+.hero {
+  padding-block: 3rem 3.25rem;
+}
+
+.hero h1 {
+  font-size: clamp(1.6rem, 6.2vw, 2.4rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.hero .offer {
+  font-size: 1rem;
+  color: var(--ink-sub);
+  margin-bottom: 0.9rem;
+}
+
+.hero .offer b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hero .promise {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 2px;
+  margin-bottom: 1rem;
+}
+
+.hero .sub {
+  color: var(--ink-sub);
+  max-width: 34rem;
+  margin-bottom: 0;
+}
+
+/* 証拠1個。ヒーローの下に、数字だけ横に並べる */
+.hero-proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  list-style: none;
+  padding-left: 0;
+}
+
+.hero-proof li {
+  margin: 0;
+}
+
+.hero-proof b {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-proof b span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-left: 0.15em;
+}
+
+.hero-proof small {
+  color: var(--ink-sub);
+  font-size: 0.8125rem;
+}
+
+/* ── 実績 ────────────────────────────── */
+
+.works {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-top: 1.5rem;
+}
+
+.work {
+  background: var(--bg);
+  padding: 1.5rem 1.35rem;
+}
+
+.work img {
+  margin-bottom: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.work h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.15rem;
+}
+
+/* 実物へ飛ぶリンク。ここだけは外へ出す（検算してもらうため） */
+.work-out {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+}
+
+.work h3 a {
+  color: var(--ink);
+  text-decoration-color: var(--line-strong);
+}
+
+.work h3 a:hover {
+  color: var(--accent);
+}
+
+.work .kind {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  margin-bottom: 0.6rem;
+}
+
+.work p {
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin-bottom: 0.6rem;
+}
+
+.work .facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.work .facts li {
+  margin-bottom: 0.15rem;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+.work .facts li::before {
+  content: '— ';
+  color: var(--ink-faint);
+}
+
+@media (min-width: 42rem) {
+  .works {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── 工程（S3） ───────────────────────── */
+
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.steps > li {
+  counter-increment: step;
+  background: var(--bg);
+  padding: 1.35rem;
+  margin: 0;
+}
+
+.steps > li h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.5rem;
+}
+
+.steps > li h3::before {
+  content: counter(step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.75rem;
+  vertical-align: 0.05em;
+}
+
+.steps dl {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.steps dt {
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  margin-top: 0.6rem;
+}
+
+.steps dd {
+  margin: 0;
+  color: var(--ink-sub);
+}
+
+@media (min-width: 52rem) {
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 実物を置く枠（Lighthouse スコア・制作ログ抜粋・ターミナル） */
+.evidence {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 46rem) {
+  .evidence {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.evidence figure {
+  margin: 0;
+}
+
+.evidence img {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.evidence figcaption {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  margin-top: 0.5rem;
+}
+
+/* 制作ログの抜粋。実物のテキストをそのまま出す */
+.logbox {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-sub);
+  padding: 1.1rem 1.25rem;
+  font-size: 0.875rem;
+  border-radius: var(--radius);
+}
+
+.logbox p:last-child {
+  margin-bottom: 0;
+}
+
+.logbox .date {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+/* Lighthouse の実測値を数字で置く枠（スクショが撮れない場合もここは事実） */
+.scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.scores li {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.9rem;
+  min-width: 7.5rem;
+  margin: 0;
+}
+
+.scores b {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.scores small {
+  font-size: 0.75rem;
+  color: var(--ink-sub);
+}
+
+/* ── 表 ─────────────────────────────── */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  /*
+    375px では表が枠からはみ出す。影も矢印も無いと「横に続いている」ことが分からないので、
+    右端に薄い影を出す。スクロールしきると消える（background-attachment: local）。
+    ヒーローのグラデ装飾とは別物で、これはスクロール可能であることの手がかり。
+  */
+  background:
+    linear-gradient(90deg, var(--bg) 30%, rgba(255, 255, 255, 0)) left / 32px 100% no-repeat,
+    linear-gradient(270deg, var(--bg) 30%, rgba(255, 255, 255, 0)) right / 32px 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) right / 12px 100% no-repeat;
+  background-attachment: local, local, scroll;
+}
+
+/*
+  2列しかない表は min-width が要らない（375px に収まる）。
+  「出す物」列を表の外に出したのに min-width: 36rem が残っていて、
+  2列でも 243px はみ出していた（御堂レビュー L1・2026-09-20 実測）。
+  この指定で横スクロール自体が消え、スクロールの影も出なくなる。
+*/
+.table-scroll--fit table {
+  min-width: 0;
+}
+
+.table-scroll--fit {
+  background: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.875rem;
+  /*
+    375px では .table-scroll の中で横に流す前提。
+    28rem だと4列の表（/process の工程表）で「2時/間」のように2文字で折れて読みにくかったので広げた。
+  */
+  min-width: 36rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--bg-sub);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* 「2時間」「1週間」のような短い値を途中で折らない */
+.nowrap {
+  white-space: nowrap;
+}
+
+/*
+  工程ごとの納品物。3列目を表から外に出したもの（御堂レビュー L1）。
+  375px で表が横にはみ出さなくなり、スクロールしないと読めない列が消える。
+*/
+.deliverables {
+  margin: 0 0 1em;
+  font-size: 0.9375rem;
+}
+
+.deliverables dt {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  margin-top: 0.75rem;
+}
+
+.deliverables dd {
+  margin: 0;
+  color: var(--ink-sub);
+}
+
+/* ── 質問リスト・チェックリスト ─────────────── */
+
+.qlist {
+  counter-reset: q;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.qlist li {
+  counter-increment: q;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  position: relative;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.qlist li::before {
+  content: 'Q' counter(q);
+  position: absolute;
+  left: 1rem;
+  top: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.checks {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.checks li {
+  padding-left: 1.75rem;
+  position: relative;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.checks li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── お引き受けする範囲（料金はサイトに載せない・2026-10-12） ── */
+
+.scope {
+  display: grid;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+@media (min-width: 40rem) {
+  .scope {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.scope h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.scope ul {
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+/* ── プロフィール・FAQ ─────────────────── */
+
+.profile {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.profile dl {
+  margin: 1rem 0 0;
+  font-size: 0.9375rem;
+  display: grid;
+  gap: 0.5rem 1rem;
+}
+
+.profile dt {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+}
+
+.profile dd {
+  margin: 0 0 0.5rem;
+  color: var(--ink-sub);
+}
+
+@media (min-width: 34rem) {
+  .profile dl {
+    grid-template-columns: 7rem 1fr;
+  }
+
+  .profile dt {
+    padding-top: 0.15rem;
+  }
+}
+
+.faq {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.faq details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  align-items: center;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: '＋';
+  color: var(--accent);
+  flex: none;
+}
+
+.faq details[open] summary::after {
+  content: '−';
+}
+
+.faq .answer {
+  padding-bottom: 1rem;
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+}
+
+.faq .answer p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── 末尾CTA ─────────────────────────── */
+
+.cta-final {
+  background: var(--bg-sub);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.cta-final h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.cta-final ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--ink-sub);
+}
+
+.cta-final li {
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.cta-final li::before {
+  content: '·';
+  position: absolute;
+  left: 0.4rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 本文ページ（/works/* /process /privacy /legal） ── */
+
+.doc {
+  max-width: 46rem;
+  padding-block: 2.5rem 1rem;
+}
+
+.doc h1 {
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  margin-bottom: 0.5rem;
+}
+
+.doc h2 {
+  font-size: 1.125rem;
+  margin: 2.25rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.doc h3 {
+  font-size: 1.0625rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.doc .meta {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  margin-bottom: 1.5rem;
+}
+
+.crumb {
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+  padding-top: 1.25rem;
+}
+
+.crumb a {
+  color: var(--ink-sub);
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 2rem;
+  font-size: 0.875rem;
+}
+
+/*
+  「なぜこの見た目にしたか」の3点（競合実査 03 の結論1）。
+  事実の列挙（.factgrid）とは別の読み物なので、番号付きの段として組む。
+*/
+.intents {
+  counter-reset: intent;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+}
+
+.intents > li {
+  counter-increment: intent;
+  border-top: 1px solid var(--line);
+  padding: 1.1rem 0;
+  margin: 0;
+}
+
+.intents > li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.intents h3 {
+  font-size: 1.0625rem;
+  margin: 0 0 0.4rem;
+}
+
+.intents h3::before {
+  content: counter(intent);
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.75rem;
+  vertical-align: 0.05em;
+}
+
+.intents p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+}
+
+/* 印刷物のような事実の並び（/works の項目） */
+.factgrid {
+  border-top: 1px solid var(--line);
+  margin-top: 1.5rem;
+}
+
+.factgrid > div {
+  border-bottom: 1px solid var(--line);
+  padding: 0.9rem 0;
+  display: grid;
+  gap: 0.15rem 1.5rem;
+}
+
+.factgrid dt,
+.factgrid .k {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+
+.factgrid .v {
+  font-size: 0.9375rem;
+}
+
+.factgrid .v ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+@media (min-width: 38rem) {
+  .factgrid > div {
+    grid-template-columns: 8rem 1fr;
+  }
+}

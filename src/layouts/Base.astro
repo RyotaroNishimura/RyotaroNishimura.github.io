@@ -1,0 +1,199 @@
+---
+import '../styles/global.css';
+import {
+  サイト略称,
+  氏名,
+  CTA文言,
+  CTAパス,
+  GA測定ID,
+  CFビーコン,
+  本番ホスト,
+  Xリンク,
+  ハンドル,
+} from '../config/サイト設定';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 検索に出したくないページ（/go/cta・404） */
+  noindex?: boolean;
+}
+const { title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/ogp.png', Astro.site).href;
+const path = Astro.url.pathname;
+const 現在地 = (p: string) => (path === p || path.startsWith(p + '/') ? 'page' : undefined);
+const 年 = new Date().getFullYear();
+/* トップに居るときは再読込させずページ内移動にする（/#範囲 のままだとリロードになる） */
+const 範囲リンク = path === '/' ? '#範囲' : '/#範囲';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={サイト略称} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:creator" content={ハンドル} />
+    <meta name="author" content={氏名} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* ページ側が head に足したい物（/go/cta の meta refresh など） */}
+    <slot name="head" />
+
+    {/*
+      GA4。自社で運用している情報サイトの実装を移植した。
+      is:inline を付けないと Astro がバンドルしようとして測定IDが解決できない。
+      測定IDが空なら1バイトも出力しない（.env 未設定＝ローカルでは何も出ない）。
+      Cookie を使うので、送信先・送信情報・目的を /privacy に明記している。
+    */}
+    {GA測定ID && (
+      <script is:inline define:vars={{ id: GA測定ID, prodHost: 本番ホスト }}>
+        (function () {
+          /*
+            自己流入を送らない。
+            GA4 の「内部トラフィック除外」は管理画面専用で Admin API から触れない（別サイトの運用で実測）。
+            なので除外ではなく、そもそも送らない側で解決する。止める条件は3つ:
+              1. 本番ホスト以外（プレビューURL・localhost）
+              2. オプトアウト済みのブラウザ（?ga-optout=1 を一度開くと以後ずっと送らない）
+              3. クローラ（JS を実行する場合がある）
+            ?ga-optin=1 で解除できる。
+          */
+          var KEY = 'portfolio_ga_optout';
+          var q = location.search;
+          try {
+            if (q.indexOf('ga-optout=1') >= 0) localStorage.setItem(KEY, '1');
+            if (q.indexOf('ga-optin=1') >= 0) localStorage.removeItem(KEY);
+          } catch (e) { /* localStorage が使えない環境では素通り */ }
+
+          var optedOut = false;
+          try { optedOut = localStorage.getItem(KEY) === '1'; } catch (e) { /* 同上 */ }
+          var isProdHost = location.hostname === prodHost;
+          var isBot = /bot|crawler|spider|crawling|headless/i.test(navigator.userAgent);
+
+          if (optedOut || !isProdHost || isBot) {
+            // 何を止めたのかが分からないと、後で「計測が壊れた」と誤診する
+            window.__gaSkipped = optedOut ? 'optout' : (!isProdHost ? 'nonprod' : 'bot');
+            return;
+          }
+
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+          document.head.appendChild(s);
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          /*
+            window に明示代入する。define:vars 付きの is:inline を Astro は IIFE で包むので、
+            function 宣言のままだと下のクリック委譲リスナーから呼べず、イベントが1件も飛ばない
+            （別サイトの運用で 2026-09-13 に踏んだ）。
+          */
+          window.gtag = gtag;
+          gtag('js', new Date());
+
+          /* 内部トラフィックの印付け。?internal=1 を1度開いた端末は以後 traffic_type=internal で送る */
+          var INTERNAL_KEY = 'portfolio_internal';
+          try {
+            if (q.indexOf('internal=1') >= 0) localStorage.setItem(INTERNAL_KEY, '1');
+            if (q.indexOf('internal=0') >= 0) localStorage.removeItem(INTERNAL_KEY);
+          } catch (e) { /* 同上 */ }
+          var 内部 = false;
+          try { 内部 = localStorage.getItem(INTERNAL_KEY) === '1'; } catch (e) { /* 同上 */ }
+          if (内部) gtag('set', { traffic_type: 'internal' });
+
+          gtag('config', id, 内部 ? { traffic_type: 'internal' } : {});
+        })();
+      </script>
+    )}
+
+    {/* Cloudflare Web Analytics。トークンは公開時に .env へ入れる。無ければ出力しない */}
+    {CFビーコン && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${CFビーコン}"}`}
+      />
+    )}
+
+    {/*
+      クリック計測。data-ga を持つ要素のクリックを1本の委譲で拾う。
+      イベント名は御堂ゲート §5 の表と同名（cta_click / works_click / outbound_store）。
+      gtag が無い環境（GA未設定・オプトアウト・非本番・広告ブロック）では何もしない。
+      scroll_75 はトップだけで測る。スクロール量の監視は passive で1回きり外す。
+    */}
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        var el = e.target && e.target.closest ? e.target.closest('[data-ga]') : null;
+        if (!el || typeof window.gtag !== 'function') return;
+        window.gtag('event', el.getAttribute('data-ga'), {
+          item: el.getAttribute('data-item') || '',
+          page_path: location.pathname,
+        });
+      }, true);
+
+      if (location.pathname === '/') {
+        var 送信済み = false;
+        var 見る = function () {
+          if (送信済み) return;
+          var h = document.documentElement;
+          var 到達 = (window.scrollY + window.innerHeight) / h.scrollHeight;
+          if (到達 < 0.75) return;
+          送信済み = true;
+          window.removeEventListener('scroll', 見る);
+          if (typeof window.gtag === 'function') window.gtag('event', 'scroll_75');
+        };
+        window.addEventListener('scroll', 見る, { passive: true });
+      }
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="site-title" href="/">{氏名}<span>Web制作</span></a>
+        <nav class="site-nav" aria-label="サイト内">
+          <a href="/works/" aria-current={現在地('/works')}>実績</a>
+          <a href="/process/" aria-current={現在地('/process')}>このサイトの作り方</a>
+          <a href={範囲リンク}>依頼範囲</a>
+          <a class="nav-cta" href={CTAパス} data-ga="cta_click" data-item="header">{CTA文言}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <nav aria-label="フッター">
+          <a href="/privacy/">プライバシーポリシー</a>
+          <a href="/legal/">運営者情報</a>
+          <a href={Xリンク} rel="me noopener" target="_blank">X（{ハンドル}）</a>
+        </nav>
+        <p class="faint">
+          {氏名}（{ハンドル}）。このサイトに載せている数字は、全て自分が公開した物から取っています。
+          note でも記事を書いています。
+        </p>
+        <p class="faint">&copy; {年} {氏名}</p>
+      </div>
+    </footer>
+  </body>
+</html>
