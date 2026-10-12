@@ -6,7 +6,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { CTA文言, CTAパス, メール, メールリンク, メールの案内 } from '../config/サイト設定';
-import { 実績一覧 } from '../config/実績';
+import { 公開済み一覧, 開発中一覧 } from '../config/実績';
 ---
 
 <Base
@@ -24,7 +24,7 @@ import { 実績一覧 } from '../config/実績';
       <li><a href="/">トップ（AI 導入・業務自動化の仕組みづくり）</a></li>
       <li><a href="/#実例">自社で運用中の実例</a></li>
       <li><a href="/#相談">相談の窓口（X の DM・メール）</a></li>
-      <li><a href="/works/">つくったもの {実績一覧.length}本</a></li>
+      <li><a href="/works/">つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）</a></li>
       <li><a href="/legal/">運営者情報</a></li>
     </ul>
 

@@ -11,12 +11,13 @@ const { w } = Astro.props;
 
 <Base
   title={`${w.名前} — ${w.種別} ｜ つくったもの`}
-  description={`${w.名前}（${w.種別}）。${w.課題} ${w.期間}`}
+  description={`${w.名前}${w.副題 ? `　${w.副題}` : ''}（${w.種別}）。${w.課題} ${w.期間}`}
 >
   <div class="wrap doc">
     <p class="crumb"><a href="/">トップ</a> ／ <a href="/works/">つくったもの</a> ／ {w.名前}</p>
     <h1>{w.名前}</h1>
     <p class="meta">{w.種別}</p>
+    {w.副題 && <p class="lead">{w.副題}</p>}
 
     {w.画像 && (
       <img
@@ -32,6 +33,7 @@ const { w } = Astro.props;
 
     <div class="factgrid">
       <div><span class="k">課題</span><span class="v">{w.課題}</span></div>
+      {w.仕組み && <div><span class="k">仕組み</span><span class="v">{w.仕組み}</span></div>}
       <div><span class="k">自分の役割</span><span class="v">{w.役割}</span></div>
       <div><span class="k">期間</span><span class="v">{w.期間}</span></div>
       <div>

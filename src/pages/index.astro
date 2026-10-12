@@ -21,12 +21,12 @@ import {
   お引き受けしないこと,
   返信時間,
 } from '../config/サイト設定';
-import { 実績一覧 } from '../config/実績';
+import { 公開済み一覧, 開発中一覧 } from '../config/実績';
 import { 経歴, 営業の数字 } from '../config/経歴';
 import { 仕事の型, 実例, 実例の時点, 失敗との対比, FAQ } from '../config/本文';
 
 const 毎朝のジョブ = 実例[0].数字;
-const アプリ数 = 実績一覧.filter((x) => x.種別.startsWith('iOS')).length;
+const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')).length;
 ---
 
 <Base
@@ -176,7 +176,7 @@ const アプリ数 = 実績一覧.filter((x) => x.種別.startsWith('iOS')).leng
     </div>
 
     <p class="small" style="margin-top:1.5rem">
-      仕組みの中では、役割を持った AI を「実行する役」と「チェックする役」に分けています。作った本人に合格を出させないためです。つくったアプリや情報サイトの中身は、<a href="/works/" data-ga="works_click" data-item="from-example">つくったもの（{実績一覧.length}本）</a>にまとめています。
+      仕組みの中では、役割を持った AI を「実行する役」と「チェックする役」に分けています。作った本人に合格を出させないためです。つくったアプリや情報サイトの中身は、<a href="/works/" data-ga="works_click" data-item="from-example">つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）</a>にまとめています。
     </p>
     <div class="btn-row">
       <a class="btn" href={CTAパス} data-ga="cta_click" data-item="example">{CTA文言}</a>

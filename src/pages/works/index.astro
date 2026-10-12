@@ -1,22 +1,23 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { 実績一覧 } from '../../config/実績';
+import { 実績一覧, 公開済み一覧, 開発中一覧 } from '../../config/実績';
 import { CTA文言, CTAパス } from '../../config/サイト設定';
 
-const 数 = (種別: string) => 実績一覧.filter((x) => x.種別.startsWith(種別)).length;
+const 数 = (種別: string) => 公開済み一覧.filter((x) => x.種別.startsWith(種別)).length;
+const 本数 = `企画から公開まで1人でやった${公開済み一覧.length}本と、開発中の${開発中一覧.length}本`;
 ---
 
 <Base
-  title={`つくったもの — 企画から公開まで1人でやった${実績一覧.length}本`}
-  description={`App Store で公開中のアプリ${数('iOS')}本、毎日動かしている情報サイト${数('情報サイト')}本、自分で使っている業務アプリ${数('Web アプリ')}本、そしてこのサイト。数字は全て公開元から取り直した実測です。`}
+  title={`つくったもの — ${本数}`}
+  description={`App Store で公開中のアプリ${数('iOS')}本、毎日動かしている情報サイト${数('情報サイト')}本、自分で使っている業務アプリ${数('Web アプリ')}本、このサイト、そして開発中の Web サービス${開発中一覧.length}本。数字は全て公開元から取り直した実測です。`}
 >
   <div class="wrap doc">
     <p class="crumb"><a href="/">トップ</a> ／ つくったもの</p>
     <h1>つくったもの</h1>
-    <p class="meta">企画から公開まで1人でやった{実績一覧.length}本（2026-10-12 時点）</p>
+    <p class="meta">{本数}（2026-10-12 時点）</p>
     <p>
-      ここに並んでいるのは受託の実績ではなく、全部自分で企画して、AI エージェントと一緒に作って公開した物です。
-      リンクを載せている物は今も動いています。自社で運営している情報サイトは、サイト名とリンクを伏せて作り方と数字だけを載せています。数字は公開元から取り直したものだけを書いています。
+      ここに並んでいるのは受託の実績ではなく、全部自分で企画して、AI エージェントと一緒に作った物です。
+      リンクを載せている物は今も動いています。開発中の物は、種別に「要件定義中」と書いて最後に載せています。自社で運営している情報サイトは、サイト名とリンクを伏せて作り方と数字だけを載せています。数字は公開元から取り直したものだけを書いています。
     </p>
 
     <div class="works" style="margin-top:2rem">
@@ -24,6 +25,7 @@ const 数 = (種別: string) => 実績一覧.filter((x) => x.種別.startsWith(�
         <article class="work">
           <h3><a href={`/works/${w.slug}/`} data-ga="works_click" data-item={w.slug}>{w.名前}</a></h3>
           <p class="kind">{w.種別}</p>
+          {w.副題 && <p>{w.副題}</p>}
           <p>{w.課題}</p>
           <ul class="facts">{w.結果.map((f) => <li>{f}</li>)}</ul>
         </article>
