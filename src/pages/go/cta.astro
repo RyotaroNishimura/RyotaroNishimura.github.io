@@ -3,22 +3,21 @@
  * CTA の中間ページ。
  *
  * なぜ挟むか: このページの訪問数＝CTAクリック数になる。
- * ボタンに JS を足さなくてもクリック率が取れるし、GA4 と Cloudflare Web Analytics の
- * 両方で同じ数を読める（御堂ゲート §5）。
+ * ボタンに JS を足さなくてもクリック率が取れる（GA4 のページ閲覧数で読める・御堂ゲート §5）。
  *
- * 行き先は X のプロフィール（2026-10-12 オーナー回答: 問い合わせは当面 X の DM）。
+ * 行き先は X のプロフィール（2026-10-12 オーナー回答: 主は X の DM。メールも併記する）。
  * DM 作成画面への直リンクは数値の user ID が要るので使わず、
  * 「プロフィールのメッセージボタンから」と書いてから移る。
  */
 import Base from '../../layouts/Base.astro';
-import { 相談先URL, 相談の案内, 返信時間, ハンドル } from '../../config/サイト設定';
+import { 相談先URL, 相談の案内, 返信時間, ハンドル, メール, メールリンク, メールの案内 } from '../../config/サイト設定';
 
 const 行き先 = 相談先URL;
 ---
 
 <Base
   title="X のプロフィールへ移動します"
-  description="相談は X の DM で受けています。X のプロフィールへ移動します。"
+  description="相談は X の DM かメールで受けています。X のプロフィールへ移動します。"
   noindex={true}
 >
   <div class="wrap doc" style="text-align:center;max-width:32rem">
@@ -33,8 +32,11 @@ const 行き先 = 相談先URL;
     <div class="btn-row" style="justify-content:center">
       <a class="btn" href={行き先} id="go" rel="noopener">X のプロフィールを開く →</a>
     </div>
+    <p class="small">
+      {メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-go-cta">{メール}</a>
+    </p>
     <p class="faint">
-      DM には、今のサイトのURLと、困っていることを1行書いてください。{返信時間}に返信します。
+      DM・メールには、手で繰り返している作業を1行書いてください。{返信時間}に返信します。
     </p>
     <a class="back-link" href="/">← トップに戻る</a>
   </div>

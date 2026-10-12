@@ -1,282 +1,255 @@
 ---
+/**
+ * トップ。2026-10-12 に、打ち出しを「AI導入・業務自動化の仕組みづくりの受託」へ作り替えた。
+ * 構成は御堂レビュー（2026-10-12・条件付きGO）の順番どおり:
+ *   1 ヒーロー → 2 仕事の型3つ → 3 自社で運用中の実例（図＋時点つきの数字）→ 4 なぜ営業出身が組むのか
+ *   → 5 経歴 → 6 お引き受けしないこと → 7 FAQ → CTA
+ * 「進め方」節は 2026-10-12 オーナー指示で撤去。導線は「相談する（X の DM かメール）」だけ。
+ * 自社で動かしている物は「実例」と呼び、受託の実績とは書かない。
+ */
 import Base from '../layouts/Base.astro';
 import {
   氏名,
-  ハンドル,
-  Xリンク,
   CTA文言,
   CTAパス,
+  ハンドル,
+  Xリンク,
   相談の案内,
-  料金の扱い,
-  含む,
-  含まない,
+  メール,
+  メールリンク,
+  メールの案内,
+  お引き受けしないこと,
   返信時間,
-  診断納期,
-  公開日の約束,
 } from '../config/サイト設定';
-import { 実績一覧, 出荷サマリー } from '../config/実績';
-import { 工程, 最初に聞く10の質問, 品質基準, FAQ, Lighthouse実測 } from '../config/本文';
+import { 実績一覧 } from '../config/実績';
+import { 経歴, 営業の数字 } from '../config/経歴';
+import { 仕事の型, 実例, 実例の時点, 失敗との対比, FAQ } from '../config/本文';
 
-const トップ実績 = 実績一覧.filter((x) => x.トップ掲載);
-const [アプリ数, サイト数, 業務アプリ数] = 出荷サマリー.map((s) => s.数);
+const 毎朝のジョブ = 実例[0].数字;
+const アプリ数 = 実績一覧.filter((x) => x.種別.startsWith('iOS')).length;
 ---
 
 <Base
-  title={`${氏名} — 戦略から公開まで、ひとりでやり切ります`}
-  description={`小さな会社の代表向けに、LP と小規模ホームページを1人で作ります。要件定義から公開、公開後の数値レポートまで同じ人が担当します。App Store のアプリ${アプリ数}本と自社サイト${サイト数}本を、企画から公開まで1人で作りました。`}
+  title={`${氏名} — 営業出身が組む、AI導入・業務自動化`}
+  description={`毎朝、AIが数字を取り、判断し、公開する。人は承認だけ。この仕組みを自社で動かしている営業出身者が、あなたの業務で同じものを作ります。相談は X の DM かメールで受けています。`}
 >
-  {/* ── S1 ヒーロー ───────────────────────── */}
+  {/* ── 1 ヒーロー ───────────────────────── */}
   <section class="wrap hero">
-    <h1>小さな会社の代表へ。<br />戦略から公開まで、ひとりでやり切ります。</h1>
-    <p class="offer">
-      作るのは <b>LP 1枚</b> と <b>小規模ホームページ（5ページ以内）</b> の2つです。
-    </p>
-    <p class="promise">{公開日の約束}</p>
-    <p class="sub">
-      打ち合わせの相手は最後まで私1人です。営業の人と、実際に作る人が別、が起きません。
-      公開した日から、何人が来て何人が問い合わせたかが数字で見えます。
+    <p class="section-label">AI導入・業務自動化の仕組みづくり</p>
+    <h1><span class="phrase">毎朝、AIが数字を取り、</span><span class="phrase">判断し、公開する。</span><br />人は承認だけ。</h1>
+    <p class="sub hero-lead">
+      この仕組みを自社で動かしている営業出身者が、あなたの業務で同じものを作ります。
     </p>
 
     <div class="btn-row">
       <a class="btn" href={CTAパス} data-ga="cta_click" data-item="hero">{CTA文言}</a>
-      <a class="btn btn-sub" href="#実績">実績を見る</a>
+      <a class="btn btn-sub" href="#実例">自社の実例を見る</a>
     </div>
-    <p class="faint">相談は無料です。{相談の案内}。どこまでお引き受けするかは<a href="#範囲">このページの下に書いてあります</a>。</p>
+    <p class="faint">
+      {相談の案内}。{メールの案内}（<a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-hero">{メール}</a>）。
+    </p>
 
     <ul class="hero-proof">
-      {出荷サマリー.map((s) => (
-        <li>
-          <b>{s.数}<span>{s.単位}</span></b>
-          <small>{s.label}</small>
-        </li>
-      ))}
+      <li>
+        <b>{毎朝のジョブ}</b>
+        <small>毎朝、自動で動くジョブ（自社で運用中・{実例の時点} 時点）</small>
+      </li>
+      <li>
+        <b>{営業の数字.取引社数}</b>
+        <small>求人広告の法人営業での年間取引社数（{営業の数字.時点}）</small>
+      </li>
+      <li>
+        <b>{営業の数字.月次1位}</b>
+        <small>主任未満の社員 約35名の月次粗利ランキングで1位（同）</small>
+      </li>
     </ul>
   </section>
 
-  {/* ── S2 出荷実績 ──────────────────────── */}
-  <section class="wrap section" id="実績">
-    <p class="section-label">公開した物</p>
-    <h2>作った物は、全部そこにあります。</h2>
+  {/* ── 2 引き受ける仕事の型 ───────────────── */}
+  <section class="wrap section" id="型">
+    <p class="section-label">引き受ける仕事</p>
+    <h2>お引き受けするのは、この3つの型です。</h2>
     <p class="lead">
-      受託の実績はまだありません。代わりに、自分で企画して自分で公開した物を置きます。
-      リンクを載せている物は今も動いています。自社で運営している情報サイトは、サイト名とリンクを伏せて作り方と数字だけを載せています。数字は全て公開元から取り直した実測です。
+      どれも、自社で毎日動かしている形をそのまま持っていきます。あなたの会社の業務に当てはめると、たとえば次のような仕事になります。
     </p>
 
-    <div class="works">
-      {トップ実績.map((w) => (
-        <article class="work">
-          {w.画像 && (
-            <a href={`/works/${w.slug}/`} data-ga="works_click" data-item={`${w.slug}-shot`}>
-              <img src={w.画像} alt={w.画像alt} width="1200" height="750" loading="lazy" decoding="async" />
-            </a>
-          )}
-          <h3><a href={`/works/${w.slug}/`} data-ga="works_click" data-item={w.slug}>{w.名前}</a></h3>
-          <p class="kind">{w.種別}</p>
-          <p>{w.課題}</p>
-          <ul class="facts">
-            {w.結果.slice(0, 2).map((f) => <li>{f}</li>)}
-          </ul>
-          {w.リンク && (
-            <p class="work-out">
-              <a href={w.リンク} rel="noopener" target="_blank" data-ga="outbound_store" data-item={w.slug}>
-                {w.リンク文言} ↗
-              </a>
-            </p>
-          )}
-        </article>
-      ))}
-    </div>
-
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="works-after">{CTA文言}</a>
-      <a class="btn btn-sub" href="/works/" data-ga="works_click" data-item="index">実績{実績一覧.length}本の詳細を見る</a>
-    </div>
-  </section>
-
-  {/* ── S3 このサイトはこう作った ─────────────── */}
-  <section class="wrap section" id="作り方">
-    <p class="section-label">このサイトはこう作った</p>
-    <h2>完成品ではなく、途中の判断を見てください。</h2>
-    <p class="lead">
-      制作会社を選ぶときに見るべきなのは、きれいな完成物ではなく「どこで何を迷って、何を選んだか」だと思っています。
-      だからこのサイトは、作っている最中の記録をそのまま公開しています。
-    </p>
-
-    <ol class="steps">
-      {工程.map((k) => (
+    <ol class="types">
+      {仕事の型.map((t) => (
         <li>
-          <h3>{k.名前}</h3>
-          <dl>
-            <dt>かかった時間</dt>
-            <dd>{k.時間}</dd>
-            <dt>ここで決めたこと</dt>
-            <dd>{k.判断}</dd>
-            <dt>使ったもの</dt>
-            <dd>{k.道具}</dd>
-          </dl>
+          <h3>{t.名前}</h3>
+          <p>{t.説明}</p>
+          <p class="types-ex"><span>よくある業務の例</span>{t.よくある業務}</p>
         </li>
       ))}
     </ol>
+  </section>
 
-    <h3 style="margin-top:2rem">実測した数字</h3>
-    <ul class="scores">
-      {Lighthouse実測.map((s) => (
-        <li><b>{s.値}</b><small>{s.名前}</small></li>
+  {/* ── 3 自社で運用中の実例 ───────────────── */}
+  <section class="wrap section section--wide" id="実例">
+    <p class="section-label">自社で運用中の実例</p>
+    <h2>いま、自社で毎朝動いている仕組みです。</h2>
+    <p class="lead">
+      ここに載せているのは受託の実績ではなく、自分の事業で動かしている仕組みです。何が人の手を通らずに動いていて、人は何をしているかを、{実例の時点} 時点の事実で書いています。
+    </p>
+
+    <div class="example">
+      <figure class="diagram">
+        <svg viewBox="0 0 360 560" role="img" aria-labelledby="図の題 図の説明" xmlns="http://www.w3.org/2000/svg">
+          <title id="図の題">自社で毎朝動いている仕組みの流れ</title>
+          <desc id="図の説明">
+            毎朝7時から8時10分に6本のジョブが起動し、数字を取り、今日やる1件を決め、AIが下書きや修正を作り、
+            検査と公開前レビューを通す。情報サイトはそのまま人の手を通らずに公開し、Xの投稿は人がDiscordで「OK」と返したあとに投稿する。
+            結果は毎回Discordに通知が届く。
+          </desc>
+          <defs>
+            <marker id="矢" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead" />
+            </marker>
+          </defs>
+
+          <g class="dg-box">
+            <rect x="10" y="10" width="240" height="58" rx="4" />
+            <rect x="10" y="90" width="240" height="58" rx="4" />
+            <rect x="10" y="170" width="240" height="58" rx="4" />
+            <rect x="10" y="250" width="240" height="58" rx="4" />
+            <rect x="10" y="330" width="240" height="58" rx="4" />
+            <rect x="10" y="420" width="115" height="58" rx="4" />
+            <rect x="135" y="420" width="115" height="58" rx="4" />
+          </g>
+          <rect class="dg-human" x="262" y="330" width="88" height="148" rx="4" />
+          <rect class="dg-note" x="10" y="500" width="340" height="48" rx="4" />
+
+          <g class="dg-t">
+            <text x="24" y="35">1 毎朝 7:00〜8:10 に起動</text>
+            <text x="24" y="115">2 数字を取る</text>
+            <text x="24" y="195">3 今日やる1件を決める</text>
+            <text x="24" y="275">4 AI が下書き・修正を作る</text>
+            <text x="24" y="355">5 検査・公開前レビュー</text>
+            <text x="22" y="445">サイトに公開</text>
+            <text x="147" y="445">X に投稿</text>
+            <text x="306" y="354" text-anchor="middle">人</text>
+          </g>
+          <g class="dg-s">
+            <text x="24" y="56">6本のジョブが順に動く</text>
+            <text x="24" y="136">検索・アクセス・公的データ</text>
+            <text x="24" y="216">対象が無い日は何もしない</text>
+            <text x="24" y="296">投稿案・ページ・画像</text>
+            <text x="24" y="376">通らなければ公開しない</text>
+            <text x="22" y="466">人の手なし</text>
+            <text x="147" y="466">「OK」のあと</text>
+            <text x="306" y="380" text-anchor="middle">Discord で</text>
+            <text x="306" y="398" text-anchor="middle">下書きを読み</text>
+            <text x="306" y="416" text-anchor="middle">「OK」と</text>
+            <text x="306" y="434" text-anchor="middle">返す</text>
+            <text x="180" y="529" text-anchor="middle">結果は毎回、Discord に通知が届く</text>
+          </g>
+
+          <g class="dg-line">
+            <line x1="130" y1="68" x2="130" y2="88" marker-end="url(#矢)" />
+            <line x1="130" y1="148" x2="130" y2="168" marker-end="url(#矢)" />
+            <line x1="130" y1="228" x2="130" y2="248" marker-end="url(#矢)" />
+            <line x1="130" y1="308" x2="130" y2="328" marker-end="url(#矢)" />
+            <polyline points="67,388 67,418" marker-end="url(#矢)" />
+            <polyline points="250,359 260,359" marker-end="url(#矢)" />
+            <polyline points="262,449 252,449" marker-end="url(#矢)" />
+          </g>
+        </svg>
+        <figcaption>
+          流れは2種類あります。情報サイトの修正は、検査とレビューを通ればそのまま公開されます。X の投稿は、人が下書きを読んで「OK」を返したあとにだけ出ます。
+        </figcaption>
+      </figure>
+
+      <ul class="example-facts">
+        {実例.map((e) => (
+          <li>
+            <p class="ef-num">{e.数字}</p>
+            <h3>{e.見出し}</h3>
+            <p>{e.本文}</p>
+          </li>
+        ))}
+        <li>
+          <p class="ef-num">{アプリ数}本</p>
+          <h3>App Store に公開した iOS アプリ</h3>
+          <p>企画から審査の提出、公開後の更新まで1人で通しました。実装は AI エージェントが書き、何を作らないかと、出た物が事実かの確認は私がやっています。</p>
+        </li>
+      </ul>
+    </div>
+
+    <p class="small" style="margin-top:1.5rem">
+      仕組みの中では、役割を持った AI を「実行する役」と「チェックする役」に分けています。作った本人に合格を出させないためです。つくったアプリや情報サイトの中身は、<a href="/works/" data-ga="works_click" data-item="from-example">つくったもの（{実績一覧.length}本）</a>にまとめています。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="example">{CTA文言}</a>
+    </div>
+  </section>
+
+  {/* ── 4 なぜ営業出身が組むのか ─────────────── */}
+  <section class="wrap section" id="なぜ">
+    <p class="section-label">なぜ営業出身が組むのか</p>
+    <h2>AI 導入がつまずくのは、たいてい技術の手前です。</h2>
+    <p class="lead">
+      つまずく原因の多くは、どの業務の何の数字を動かすのかを、作る前に誰も決めていないことです。エンジニアではなく、営業の現場を知る人間が組む理由はここにあります。
+    </p>
+
+    <div class="contrast" role="table" aria-label="AI 導入のよくある進め方と、このやり方の違い">
+      <div class="contrast-head" role="row">
+        <span role="columnheader">項目</span>
+        <span role="columnheader">よくある進め方</span>
+        <span role="columnheader">このやり方</span>
+      </div>
+      {失敗との対比.map((r) => (
+        <div class="contrast-row" role="row">
+          <span class="c-k" role="rowheader">{r.項目}</span>
+          <span class="c-bad" role="cell"><em>よくある進め方</em>{r.よくある}</span>
+          <span class="c-good" role="cell"><em>このやり方</em>{r.このやり方}</span>
+        </div>
       ))}
-    </ul>
-    <p class="faint" style="margin-top:0.6rem">
-      Lighthouse をモバイル設定で本番ビルドに対して実行した実測値です。測定日と実行コマンドは /process に載せています。
-    </p>
-
-    <p class="small">
-      私は、作ったものを実際に世に出すところまでを「<b>出荷</b>」と呼んでいます。
-      動くものが人の手元に届いて、はじめて1本と数えます。
-    </p>
-
-    <div class="evidence">
-      <div class="logbox">
-        <p class="date">制作ログ.md 2026-09-20 ／ 要件定義</p>
-        <p><b>判断①：実績を1本減らした。</b></p>
-        <p>
-          載せる予定だったサイトが1本、URLを叩いたら到達しなかった。
-          着手は決めていたけれど、出荷物が無い。<br />
-          載せれば「3本」と書けるけれど、検算されたら終わる。<br />
-          <b>→ 実績から落として「2本」にした。</b>
-        </p>
-      </div>
-      <div class="logbox">
-        <p class="date">制作ログ.md 2026-09-20 ／ 要件定義</p>
-        <p><b>判断②：自分のメモより Apple の記録を採った。</b></p>
-        <p>
-          アプリ2本の公開日が、社内の記録では 7/17、Apple の公開データでは 7/16 だった。
-          1日ずれている。<br />
-          <b>→ 第三者が確かめられるほうにそろえた。</b>
-        </p>
-      </div>
     </div>
 
     <p style="margin-top:1.5rem">
-      実装そのものは AI エージェントに任せています。私がやるのは、何を作らないと決めるところと、出た物が事実かを確かめるところです。
+      求人広告の営業では、初めて伺う会社の事業と稼ぎ方を先に調べ、仮説を持って話を聞いてきました。提案を通すには、相手の担当者が追っている目標の数字に合わせる必要があります。AI の仕組みづくりでも、最初にやることは同じです。業務の手順を聞き、どの数字が動けば成功かを決めてから作ります。
     </p>
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="process-after">{CTA文言}</a>
-      <a class="btn btn-sub" href="/process/">工程の全文を読む</a>
-    </div>
-    <p class="faint">同じやり方で、あなたのサイトも作ります。</p>
   </section>
 
-  {/* ── S4 進め方と最初に聞くこと ──────────────── */}
-  <section class="wrap section" id="進め方">
-    <p class="section-label">進め方</p>
-    <h2>頼んだあと、何が起きるか。</h2>
+  {/* ── 5 経歴 ───────────────────────────── */}
+  <section class="wrap section section--tight" id="経歴">
+    <p class="section-label">経歴</p>
+    <h2>{氏名}</h2>
 
-    <p class="faint" id="工程表の注記">
-      期間は目安です。確定は要件定義が終わった時点でお出しします。
-    </p>
-    <div class="table-scroll table-scroll--fit">
-      <table aria-describedby="工程表の注記">
-        <thead>
-          <tr><th scope="col">工程</th><th scope="col">期間の目安</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>要件定義</td><td class="nowrap">1週間</td></tr>
-          <tr><td>設計</td><td class="nowrap">1週間</td></tr>
-          <tr><td>実装</td><td class="nowrap">1〜2週間</td></tr>
-          <tr><td>公開・計測</td><td class="nowrap">1週間</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <dl class="deliverables">
-      <dt>要件定義で出す物</dt>
-      <dd>下の10の質問への回答をまとめた要件メモ</dd>
-      <dt>設計で出す物</dt>
-      <dd>ページ構成・各セクションで言うこと・本文の下書き</dd>
-      <dt>実装で出す物</dt>
-      <dd>本番と同じ状態で動くプレビューURL</dd>
-      <dt>公開・計測で出す物</dt>
-      <dd>公開作業・計測の設置・スマホ実機での確認</dd>
-    </dl>
-
-    <h3 id="10の質問">最初に聞く10の質問</h3>
-    <p class="lead">
-      最初の打ち合わせで、この10個を聞きます。先に見えていたほうが準備しやすいはずなので出しておきます。
-      答えが決まっていなくても構いません。決まっていない場所こそ、一緒に決める場所です。
-    </p>
-    <ol class="qlist">
-      {最初に聞く10の質問.map((q) => <li>{q}</li>)}
+    <ol class="career">
+      {経歴.map((c) => (
+        <li>
+          <p class="career-when">{c.時期}</p>
+          <div>
+            <h3>{c.見出し}</h3>
+            {c.本文 && <p>{c.本文}</p>}
+            {c.数字 && (
+              <ul class="career-nums">
+                {c.数字.map((n) => <li>{n}</li>)}
+              </ul>
+            )}
+            {c.数字の注記 && <p class="faint">{c.数字の注記}</p>}
+          </div>
+        </li>
+      ))}
     </ol>
 
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="questions">{CTA文言}</a>
-    </div>
-    <p class="faint">この10個を一緒に埋めるところから始めます。</p>
+    <p class="career-contact">
+      連絡先: <a href={Xリンク} rel="me noopener" target="_blank">X（{ハンドル}）の DM</a>
+      ／ メール <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-career">{メール}</a>
+    </p>
   </section>
 
-  {/* ── S5 品質基準 ──────────────────────── */}
-  <section class="wrap section section--tight" id="品質基準">
-    <p class="section-label">引き渡しの条件</p>
-    <h2>これを満たしたときだけ、納品と呼びます。</h2>
-    <p class="lead">
-      「完成しました」の中身は会社によって違います。私の場合はここに書いた8つで、
-      1つでも欠けていたら引き渡しません。このサイト自身も同じ基準で作っています。
-    </p>
-    <ul class="checks">
-      {品質基準.map((c) => <li>{c}</li>)}
+  {/* ── 6 お引き受けしないこと ─────────────── */}
+  <section class="wrap section section--tight" id="範囲">
+    <p class="section-label">お引き受けしないこと</p>
+    <h2>先に、やらないことを書いておきます。</h2>
+    <ul class="nots">
+      {お引き受けしないこと.map((x) => <li>{x}</li>)}
     </ul>
   </section>
 
-  {/* ── S6 お引き受けする範囲 ─────────────────── */}
-  {/* 料金はサイトに載せない（2026-10-12 オーナー回答）。作業範囲だけを価格なしで残す */}
-  <section class="wrap section section--wide" id="範囲">
-    <p class="section-label">お引き受けする範囲</p>
-    <h2>どこまでやるかを先に書きます。</h2>
-
-    <div class="scope">
-      <div>
-        <h3>含むもの</h3>
-        <ul>{含む.map((x) => <li>{x}</li>)}</ul>
-      </div>
-      <div>
-        <h3>含まないもの</h3>
-        <ul>{含まない.map((x) => <li>{x}</li>)}</ul>
-      </div>
-    </div>
-
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="scope">{CTA文言}</a>
-    </div>
-    <p class="faint">{料金の扱い}</p>
-  </section>
-
-  {/* ── S7 プロフィール ───────────────────── */}
-  <section class="wrap section section--tight" id="私について">
-    <p class="section-label">担当者</p>
-    <h2>営業も設計も実装も、同じ人がやります。</h2>
-
-    <div class="profile">
-      <p>
-        <b>{氏名}</b>（X: <a href={Xリンク} rel="noopener" target="_blank">{ハンドル}</a>）
-      </p>
-      <p class="small">note でも記事を書いています。</p>
-      <p class="small">
-        自分で企画した物を自分で公開するところまでやってきました。
-        App Store に{アプリ数}本、自分で毎日動かしている情報サイトが{サイト数}本、自分の営業に使っている業務アプリが{業務アプリ数}本あります。
-        全部、企画から公開まで1人です。
-      </p>
-      <dl>
-        <dt>やること</dt>
-        <dd>要件定義・構成・本文・実装・公開・計測の設置</dd>
-        <dt>やらないこと</dt>
-        <dd>写真撮影・動画制作・広告運用（できる人を紹介します）</dd>
-        <dt>連絡</dt>
-        <dd>X の DM から（プロフィールのメッセージボタン）。{返信時間}に返信します</dd>
-        <dt>同時に受ける数</dt>
-        <dd>2件まで。3件目は着手日をお伝えしてお待ちいただきます</dd>
-      </dl>
-    </div>
-  </section>
-
-  {/* ── S8 FAQ ──────────────────────────── */}
+  {/* ── 7 FAQ ──────────────────────────── */}
   <section class="wrap section section--tight" id="よくある質問">
     <p class="section-label">よくある質問</p>
     <h2>先に答えておきます。</h2>
@@ -290,22 +263,23 @@ const [アプリ数, サイト数, 業務アプリ数] = 出荷サマリー.map(
     </div>
   </section>
 
-  {/* ── S9 CTA 再掲 ──────────────────────── */}
+  {/* ── CTA ───────────────────────────── */}
   <section class="wrap section" id="相談">
     <div class="cta-final">
-      <h2>まず、今のサイトを見せてください。</h2>
+      <h2>まず、手でやっている業務を1つ教えてください。</h2>
       <p class="small">
-        今あるサイトのどこで人が止まっているかを見て、直す場所を1枚にまとめて返します。
-        そのまま他の人に頼んでもらっても構いません。
+        毎日・毎週、誰かが手で繰り返している作業を1つ挙げてもらえれば、そこから話を始めます。
       </p>
       <div class="btn-row">
         <a class="btn" href={CTAパス} data-ga="cta_click" data-item="footer">{CTA文言}</a>
       </div>
+      <p class="small">
+        {メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-footer">{メール}</a>
+      </p>
       <ul>
         <li>X の DM で受けています。{相談の案内}</li>
-        <li>DM には、今のサイトのURLと、困っていることを1行書いてください</li>
+        <li>DM・メールには、手で繰り返している作業を1行書いてください</li>
         <li>{返信時間}に返信します</li>
-        <li>相談のあと{診断納期}に、今のサイトの診断を1枚で返します</li>
         <li>その場で契約をお願いすることはありません</li>
       </ul>
     </div>

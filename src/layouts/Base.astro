@@ -6,10 +6,11 @@ import {
   CTA文言,
   CTAパス,
   GA測定ID,
-  CFビーコン,
   本番ホスト,
   Xリンク,
   ハンドル,
+  メール,
+  メールリンク,
 } from '../config/サイト設定';
 
 interface Props {
@@ -24,8 +25,8 @@ const ogImage = new URL('/ogp.png', Astro.site).href;
 const path = Astro.url.pathname;
 const 現在地 = (p: string) => (path === p || path.startsWith(p + '/') ? 'page' : undefined);
 const 年 = new Date().getFullYear();
-/* トップに居るときは再読込させずページ内移動にする（/#範囲 のままだとリロードになる） */
-const 範囲リンク = path === '/' ? '#範囲' : '/#範囲';
+/* トップに居るときは再読込させずページ内移動にする（/#実例 のままだとリロードになる） */
+const 頭 = path === '/' ? '' : '/';
 ---
 
 <!doctype html>
@@ -120,16 +121,6 @@ const 範囲リンク = path === '/' ? '#範囲' : '/#範囲';
       </script>
     )}
 
-    {/* Cloudflare Web Analytics。トークンは公開時に .env へ入れる。無ければ出力しない */}
-    {CFビーコン && (
-      <script
-        is:inline
-        defer
-        src="https://static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon={`{"token": "${CFビーコン}"}`}
-      />
-    )}
-
     {/*
       クリック計測。data-ga を持つ要素のクリックを1本の委譲で拾う。
       イベント名は御堂ゲート §5 の表と同名（cta_click / works_click / outbound_store）。
@@ -167,11 +158,11 @@ const 範囲リンク = path === '/' ? '#範囲' : '/#範囲';
 
     <header class="site-header">
       <div class="wrap">
-        <a class="site-title" href="/">{氏名}<span>Web制作</span></a>
+        <a class="site-title" href="/">{氏名}<span>AI導入・業務自動化</span></a>
         <nav class="site-nav" aria-label="サイト内">
-          <a href="/works/" aria-current={現在地('/works')}>実績</a>
-          <a href="/process/" aria-current={現在地('/process')}>このサイトの作り方</a>
-          <a href={範囲リンク}>依頼範囲</a>
+          <a href={`${頭}#実例`}>自社の実例</a>
+          <a href={`${頭}#経歴`}>経歴</a>
+          <a href="/works/" aria-current={現在地('/works')}>つくったもの</a>
           <a class="nav-cta" href={CTAパス} data-ga="cta_click" data-item="header">{CTA文言}</a>
         </nav>
       </div>
@@ -184,12 +175,14 @@ const 範囲リンク = path === '/' ? '#範囲' : '/#範囲';
     <footer class="site-footer">
       <div class="wrap">
         <nav aria-label="フッター">
+          <a href="/process/" aria-current={現在地('/process')}>このサイトの作り方</a>
           <a href="/privacy/">プライバシーポリシー</a>
           <a href="/legal/">運営者情報</a>
           <a href={Xリンク} rel="me noopener" target="_blank">X（{ハンドル}）</a>
+          <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-site-footer">{メール}</a>
         </nav>
         <p class="faint">
-          {氏名}（{ハンドル}）。このサイトに載せている数字は、全て自分が公開した物から取っています。
+          {氏名}（{ハンドル}）。このサイトの数字は、時点を添えて一次ソースから取っています。自社で運用中の実例は、受託の実績とは分けて書いています。
           note でも記事を書いています。
         </p>
         <p class="faint">&copy; {年} {氏名}</p>

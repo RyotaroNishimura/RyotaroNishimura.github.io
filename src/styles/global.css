@@ -352,13 +352,6 @@ li {
   margin: 1.5rem 0 0.75rem;
 }
 
-/* 段落に単独で置く導線リンク。指で押せる高さを確保する（本文中のリンクには使わない） */
-.link-block {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-}
-
 /* ── ヒーロー ─────────────────────────── */
 
 .hero {
@@ -368,27 +361,6 @@ li {
 .hero h1 {
   font-size: clamp(1.6rem, 6.2vw, 2.4rem);
   letter-spacing: -0.02em;
-  margin-bottom: 1rem;
-}
-
-.hero .offer {
-  font-size: 1rem;
-  color: var(--ink-sub);
-  margin-bottom: 0.9rem;
-}
-
-.hero .offer b {
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.hero .promise {
-  display: inline-block;
-  font-weight: 700;
-  font-size: 1.0625rem;
-  border-bottom: 3px solid var(--accent);
-  padding-bottom: 2px;
   margin-bottom: 1rem;
 }
 
@@ -458,12 +430,6 @@ li {
   margin-bottom: 0.15rem;
 }
 
-/* 実物へ飛ぶリンク。ここだけは外へ出す（検算してもらうため） */
-.work-out {
-  margin: 0.75rem 0 0;
-  font-size: 0.8125rem;
-}
-
 .work h3 a {
   color: var(--ink);
   text-decoration-color: var(--line-strong);
@@ -510,96 +476,6 @@ li {
   }
 }
 
-/* ── 工程（S3） ───────────────────────── */
-
-.steps {
-  counter-reset: step;
-  list-style: none;
-  padding: 0;
-  margin: 1.5rem 0 0;
-  display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-}
-
-.steps > li {
-  counter-increment: step;
-  background: var(--bg);
-  padding: 1.35rem;
-  margin: 0;
-}
-
-.steps > li h3 {
-  font-size: 1.0625rem;
-  margin-bottom: 0.5rem;
-}
-
-.steps > li h3::before {
-  content: counter(step);
-  display: inline-grid;
-  place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-right: 0.5rem;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 0.75rem;
-  vertical-align: 0.05em;
-}
-
-.steps dl {
-  margin: 0;
-  font-size: 0.875rem;
-}
-
-.steps dt {
-  color: var(--ink-faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  margin-top: 0.6rem;
-}
-
-.steps dd {
-  margin: 0;
-  color: var(--ink-sub);
-}
-
-@media (min-width: 52rem) {
-  .steps {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* 実物を置く枠（Lighthouse スコア・制作ログ抜粋・ターミナル） */
-.evidence {
-  display: grid;
-  gap: 1.25rem;
-  margin-top: 1.75rem;
-}
-
-@media (min-width: 46rem) {
-  .evidence {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.evidence figure {
-  margin: 0;
-}
-
-.evidence img {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.evidence figcaption {
-  font-size: 0.8125rem;
-  color: var(--ink-faint);
-  margin-top: 0.5rem;
-}
-
 /* 制作ログの抜粋。実物のテキストをそのまま出す */
 .logbox {
   border: 1px solid var(--line);
@@ -619,245 +495,6 @@ li {
   font-size: 0.75rem;
   color: var(--ink-faint);
   letter-spacing: 0.02em;
-}
-
-/* Lighthouse の実測値を数字で置く枠（スクショが撮れない場合もここは事実） */
-.scores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.scores li {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 0.6rem 0.9rem;
-  min-width: 7.5rem;
-  margin: 0;
-}
-
-.scores b {
-  display: block;
-  font-size: 1.5rem;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-}
-
-.scores small {
-  font-size: 0.75rem;
-  color: var(--ink-sub);
-}
-
-/* ── 表 ─────────────────────────────── */
-
-.table-scroll {
-  overflow-x: auto;
-  margin: 1.25rem 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  /*
-    375px では表が枠からはみ出す。影も矢印も無いと「横に続いている」ことが分からないので、
-    右端に薄い影を出す。スクロールしきると消える（background-attachment: local）。
-    ヒーローのグラデ装飾とは別物で、これはスクロール可能であることの手がかり。
-  */
-  background:
-    linear-gradient(90deg, var(--bg) 30%, rgba(255, 255, 255, 0)) left / 32px 100% no-repeat,
-    linear-gradient(270deg, var(--bg) 30%, rgba(255, 255, 255, 0)) right / 32px 100% no-repeat,
-    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) right / 12px 100% no-repeat;
-  background-attachment: local, local, scroll;
-}
-
-/*
-  2列しかない表は min-width が要らない（375px に収まる）。
-  「出す物」列を表の外に出したのに min-width: 36rem が残っていて、
-  2列でも 243px はみ出していた（御堂レビュー L1・2026-09-20 実測）。
-  この指定で横スクロール自体が消え、スクロールの影も出なくなる。
-*/
-.table-scroll--fit table {
-  min-width: 0;
-}
-
-.table-scroll--fit {
-  background: none;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 0.875rem;
-  /*
-    375px では .table-scroll の中で横に流す前提。
-    28rem だと4列の表（/process の工程表）で「2時/間」のように2文字で折れて読みにくかったので広げた。
-  */
-  min-width: 36rem;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.7rem 0.9rem;
-  border-bottom: 1px solid var(--line);
-  vertical-align: top;
-}
-
-thead th {
-  background: var(--bg-sub);
-  font-size: 0.8125rem;
-  white-space: nowrap;
-}
-
-tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-/* 「2時間」「1週間」のような短い値を途中で折らない */
-.nowrap {
-  white-space: nowrap;
-}
-
-/*
-  工程ごとの納品物。3列目を表から外に出したもの（御堂レビュー L1）。
-  375px で表が横にはみ出さなくなり、スクロールしないと読めない列が消える。
-*/
-.deliverables {
-  margin: 0 0 1em;
-  font-size: 0.9375rem;
-}
-
-.deliverables dt {
-  font-weight: 700;
-  font-size: 0.8125rem;
-  color: var(--ink-faint);
-  margin-top: 0.75rem;
-}
-
-.deliverables dd {
-  margin: 0;
-  color: var(--ink-sub);
-}
-
-/* ── 質問リスト・チェックリスト ─────────────── */
-
-.qlist {
-  counter-reset: q;
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.qlist li {
-  counter-increment: q;
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  position: relative;
-  font-size: 0.9375rem;
-  margin: 0;
-}
-
-.qlist li::before {
-  content: 'Q' counter(q);
-  position: absolute;
-  left: 1rem;
-  top: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.checks {
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.checks li {
-  padding-left: 1.75rem;
-  position: relative;
-  font-size: 0.9375rem;
-  margin: 0;
-}
-
-.checks li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: 700;
-}
-
-/* ── お引き受けする範囲（料金はサイトに載せない・2026-10-12） ── */
-
-.scope {
-  display: grid;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-@media (min-width: 40rem) {
-  .scope {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.scope h3 {
-  font-size: 1.0625rem;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 2px solid var(--line-strong);
-}
-
-.scope ul {
-  font-size: 0.9375rem;
-  color: var(--ink-sub);
-  margin: 0;
-  padding-left: 1.2em;
-}
-
-/* ── プロフィール・FAQ ─────────────────── */
-
-.profile {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-top: 1.25rem;
-}
-
-.profile dl {
-  margin: 1rem 0 0;
-  font-size: 0.9375rem;
-  display: grid;
-  gap: 0.5rem 1rem;
-}
-
-.profile dt {
-  font-weight: 700;
-  font-size: 0.8125rem;
-  color: var(--ink-faint);
-}
-
-.profile dd {
-  margin: 0 0 0.5rem;
-  color: var(--ink-sub);
-}
-
-@media (min-width: 34rem) {
-  .profile dl {
-    grid-template-columns: 7rem 1fr;
-  }
-
-  .profile dt {
-    padding-top: 0.15rem;
-  }
 }
 
 .faq {
@@ -1069,4 +706,363 @@ tbody tr:last-child td {
   .factgrid > div {
     grid-template-columns: 8rem 1fr;
   }
+}
+
+/* ══ 2026-10-12 AI導入・業務自動化への作り替えで足した部品 ══ */
+
+/* 見出しを語の切れ目でだけ折る（「判断/し」のような途中折れを防ぐ） */
+.hero h1 .phrase {
+  display: inline-block;
+}
+
+.hero .hero-lead {
+  font-size: 1.0625rem;
+  color: var(--ink);
+  max-width: 38rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ── 2 仕事の型（3つ） ───────────────────── */
+
+.types {
+  counter-reset: type;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.types > li {
+  counter-increment: type;
+  background: var(--bg);
+  padding: 1.4rem 1.35rem;
+  margin: 0;
+}
+
+.types h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.5rem;
+}
+
+.types h3::before {
+  content: '型' counter(type);
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.types p {
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin-bottom: 0.75rem;
+}
+
+.types .types-ex {
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--line-strong);
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+
+.types-ex span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+
+@media (min-width: 52rem) {
+  .types {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── 3 自社で運用中の実例（図＋数字） ─────────── */
+
+.example {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.75rem;
+  align-items: start;
+}
+
+@media (min-width: 52rem) {
+  .example {
+    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+  }
+}
+
+.diagram {
+  margin: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 24rem;
+  margin-inline: auto;
+}
+
+.diagram figcaption {
+  font-size: 0.8125rem;
+  color: var(--ink-sub);
+  margin-top: 0.75rem;
+}
+
+.dg-box rect {
+  fill: var(--bg);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.dg-human {
+  fill: var(--accent-faint);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.dg-note {
+  fill: var(--bg-sub);
+  stroke: var(--line);
+}
+
+.dg-t text {
+  fill: var(--ink);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+
+.dg-s text {
+  fill: var(--ink-sub);
+  font-size: 11.5px;
+  font-family: var(--font);
+}
+
+.dg-line line,
+.dg-line polyline {
+  stroke: var(--ink-faint);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.dg-arrowhead {
+  fill: var(--ink-faint);
+}
+
+.example-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.example-facts > li {
+  background: var(--bg);
+  padding: 1.1rem 1.25rem;
+  margin: 0;
+}
+
+.example-facts .ef-num {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 0.2rem;
+}
+
+.example-facts h3 {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.example-facts p {
+  font-size: 0.9rem;
+  color: var(--ink-sub);
+  margin: 0;
+}
+
+/* ── 4 よくある進め方との対比 ─────────────────── */
+
+.contrast {
+  margin-top: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+}
+
+.contrast-head {
+  display: none;
+}
+
+.contrast-row {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.contrast-head + .contrast-row {
+  border-top: 0;
+}
+
+.contrast .c-k {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--accent);
+}
+
+.contrast em {
+  display: block;
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+
+.contrast .c-bad {
+  color: var(--ink-sub);
+}
+
+.contrast .c-good {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (min-width: 46rem) {
+  .contrast-head,
+  .contrast-row {
+    display: grid;
+    grid-template-columns: 6rem 1fr 1fr;
+    gap: 1rem;
+    padding: 0.8rem 1.1rem;
+  }
+
+  .contrast-head {
+    background: var(--bg-sub);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .contrast em {
+    display: none;
+  }
+}
+
+/* ── 5 経歴 ─────────────────────────── */
+
+.career {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  border-left: 2px solid var(--line);
+}
+
+.career > li {
+  position: relative;
+  padding: 0 0 1.4rem 1.25rem;
+  margin: 0;
+}
+
+.career > li::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 0.55rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.career-when {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.career h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.35rem;
+}
+
+.career p {
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin-bottom: 0.5rem;
+}
+
+.career-nums {
+  list-style: none;
+  padding: 0.75rem 1rem;
+  margin: 0 0 0.5rem;
+  background: var(--bg-sub);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.career-nums li {
+  margin: 0.15rem 0;
+}
+
+/* 経歴節の下の連絡先 */
+.career-contact {
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+}
+
+/* メールアドレスは長い1語なので、狭い画面でも横にはみ出さないよう途中で折る */
+a.mail {
+  overflow-wrap: anywhere;
+}
+
+/* ── 6 お引き受けしないこと ───────────────── */
+
+.nots {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.nots li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin: 0;
+}
+
+.nots li::before {
+  content: '×';
+  position: absolute;
+  left: 0.2rem;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+
+/* /process の分担表（dl で組む） */
+.factgrid dd {
+  margin: 0;
 }

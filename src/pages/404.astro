@@ -5,7 +5,7 @@
  * 戻り先とCTAだけ置く。検索には出さない。
  */
 import Base from '../layouts/Base.astro';
-import { CTA文言, CTAパス } from '../config/サイト設定';
+import { CTA文言, CTAパス, メール, メールリンク, メールの案内 } from '../config/サイト設定';
 import { 実績一覧 } from '../config/実績';
 ---
 
@@ -21,15 +21,17 @@ import { 実績一覧 } from '../config/実績';
       お探しの内容は、たいていこのどれかです。
     </p>
     <ul>
-      <li><a href="/">トップ（進め方・品質基準・お引き受けする範囲）</a></li>
-      <li><a href="/works/">実績 {実績一覧.length}本</a></li>
-      <li><a href="/process/">このサイトはこう作った</a></li>
+      <li><a href="/">トップ（AI 導入・業務自動化の仕組みづくり）</a></li>
+      <li><a href="/#実例">自社で運用中の実例</a></li>
+      <li><a href="/#相談">相談の窓口（X の DM・メール）</a></li>
+      <li><a href="/works/">つくったもの {実績一覧.length}本</a></li>
       <li><a href="/legal/">運営者情報</a></li>
     </ul>
 
     <div class="btn-row">
       <a class="btn" href={CTAパス} data-ga="cta_click" data-item="404">{CTA文言}</a>
     </div>
+    <p class="small">{メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-404">{メール}</a></p>
     <a class="back-link" href="/">← トップに戻る</a>
   </div>
 </Base>

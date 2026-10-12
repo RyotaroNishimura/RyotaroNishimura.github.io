@@ -10,11 +10,11 @@ const { w } = Astro.props;
 ---
 
 <Base
-  title={`${w.名前} — ${w.種別} ｜ 実績`}
+  title={`${w.名前} — ${w.種別} ｜ つくったもの`}
   description={`${w.名前}（${w.種別}）。${w.課題} ${w.期間}`}
 >
   <div class="wrap doc">
-    <p class="crumb"><a href="/">トップ</a> ／ <a href="/works/">実績</a> ／ {w.名前}</p>
+    <p class="crumb"><a href="/">トップ</a> ／ <a href="/works/">つくったもの</a> ／ {w.名前}</p>
     <h1>{w.名前}</h1>
     <p class="meta">{w.種別}</p>
 
@@ -72,6 +72,6 @@ const { w } = Astro.props;
     <div class="btn-row">
       <a class="btn" href={CTAパス} data-ga="cta_click" data-item={`works-${w.slug}`}>{CTA文言}</a>
     </div>
-    <a class="back-link" href="/works/">← 実績一覧に戻る</a>
+    <a class="back-link" href="/works/">← つくったもの一覧に戻る</a>
   </div>
 </Base>
