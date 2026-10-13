@@ -2,10 +2,9 @@
 /**
  * 404。Astro 既定の英語ページだと、人脈共有のURLを打ち間違えて着いた人が
  * 「閉じたサイト」だと思って離脱する（御堂レビュー L4）。
- * 戻り先とCTAだけ置く。検索には出さない。
+ * 戻り先だけ置く（2026-10-13: 連絡のボタンは外した）。検索には出さない。
  */
 import Base from '../layouts/Base.astro';
-import { CTA文言, CTAパス, メール, メールリンク, メールの案内 } from '../config/サイト設定';
 import { 公開済み一覧, 開発中一覧 } from '../config/実績';
 ---
 
@@ -21,17 +20,13 @@ import { 公開済み一覧, 開発中一覧 } from '../config/実績';
       お探しの内容は、たいていこのどれかです。
     </p>
     <ul>
-      <li><a href="/">トップ（AI 導入・業務自動化の仕組みづくり）</a></li>
-      <li><a href="/#実例">自社で運用中の実例</a></li>
-      <li><a href="/#相談">相談の窓口（X の DM・メール）</a></li>
+      <li><a href="/">トップ（プロフィール）</a></li>
+      <li><a href="/#実績">実績</a></li>
+      <li><a href="/#経歴">経歴</a></li>
       <li><a href="/works/">つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）</a></li>
+      <li><a href="/#連絡先">連絡先</a></li>
       <li><a href="/legal/">運営者情報</a></li>
     </ul>
-
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="404">{CTA文言}</a>
-    </div>
-    <p class="small">{メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-404">{メール}</a></p>
     <a class="back-link" href="/">← トップに戻る</a>
   </div>
 </Base>

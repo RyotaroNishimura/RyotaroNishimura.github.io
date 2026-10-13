@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { 実績一覧, 公開済み一覧, 開発中一覧 } from '../../config/実績';
-import { CTA文言, CTAパス } from '../../config/サイト設定';
 
 const 数 = (種別: string) => 公開済み一覧.filter((x) => x.種別.startsWith(種別)).length;
 const 本数 = `企画から公開まで1人でやった${公開済み一覧.length}本と、開発中の${開発中一覧.length}本`;
@@ -32,9 +31,6 @@ const 本数 = `企画から公開まで1人でやった${公開済み一覧.len
       ))}
     </div>
 
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="works-index">{CTA文言}</a>
-    </div>
     <a class="back-link" href="/">← トップに戻る</a>
   </div>
 </Base>

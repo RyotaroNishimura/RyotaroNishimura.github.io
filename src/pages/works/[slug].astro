@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { 実績一覧 } from '../../config/実績';
-import { CTA文言, CTAパス } from '../../config/サイト設定';
 
 export function getStaticPaths() {
   return 実績一覧.map((w) => ({ params: { slug: w.slug }, props: { w } }));
@@ -71,9 +70,6 @@ const { w } = Astro.props;
       </>
     )}
 
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item={`works-${w.slug}`}>{CTA文言}</a>
-    </div>
     <a class="back-link" href="/works/">← つくったもの一覧に戻る</a>
   </div>
 </Base>

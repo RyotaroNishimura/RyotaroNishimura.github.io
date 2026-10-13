@@ -1,227 +1,43 @@
 ---
 /**
- * トップ。2026-10-12 に、打ち出しを「AI導入・業務自動化の仕組みづくりの受託」へ作り替えた。
- * 構成は御堂レビュー（2026-10-12・条件付きGO）の順番どおり:
- *   1 ヒーロー → 2 仕事の型3つ → 3 自社で運用中の実例（図＋時点つきの数字）→ 4 なぜ営業出身が組むのか
- *   → 5 経歴 → 6 お引き受けしないこと → 7 FAQ → CTA
- * 「進め方」節は 2026-10-12 オーナー指示で撤去。導線は「相談する（X の DM かメール）」だけ。
- * 自社で動かしている物は「実例」と呼び、受託の実績とは書かない。
+ * トップ。2026-10-13 にオーナー指示＋御堂の再設計で作り替えた。
+ *
+ * オーナーの言葉で「経歴を書いているだけ」のサイト（案件を受けるためのページではない・2026-10-13）。
+ * 主語は営業・プランナー。AI は「自分でも作って使っている」という裏付けに回す。
+ * 受託や営業代行を呼びかける文言は置かない。「今できること」は能力の説明として書く。
+ * 連絡先は一番下に事実として置くだけ（ヘッダー・ヒーローに CTA を置かない）。
+ * 静岡県の広報戦略アドバイザー就任は、数字の枠に入れず、実績節の下の注記として控えめに1か所だけ出す。
+ *
+ * 構成（上から）:
+ *   1 ヒーロー（プロフィールの要約）→ 2 実績（数字4つ＋就任）→ 3 経歴 → 4 今できること
+ *   → 5 AI は自分で作っている（裏付け）→ 6 つくったもの への導線 → 7 連絡先
+ * 個人で作って動かしている物は「個人で」と書き、受託の実績とも勤務先の業務とも混ぜない。
  */
 import Base from '../layouts/Base.astro';
 import {
   氏名,
-  CTA文言,
-  CTAパス,
+  サイト名,
   ハンドル,
   Xリンク,
-  相談の案内,
   メール,
   メールリンク,
-  メールの案内,
-  お引き受けしないこと,
-  返信時間,
 } from '../config/サイト設定';
 import { 公開済み一覧, 開発中一覧 } from '../config/実績';
-import { 経歴, 営業の数字, 現職の数字, 勤務先でのAI推進 } from '../config/経歴';
-import { 仕事の型, 実例, 実例の時点, 失敗との対比, FAQ } from '../config/本文';
+import { 経歴, 実績の数字, 就任 } from '../config/経歴';
+import { 今できること, 実例, 実例の時点 } from '../config/本文';
 
-const 毎朝のジョブ = 実例[0].数字;
+const 毎朝のジョブ = 実例[0];
 const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')).length;
+const 開発中 = 開発中一覧[0];
 ---
 
 <Base
-  title={`${氏名} — 営業出身が組む、AI導入・業務自動化`}
-  description={`毎朝、AIが数字を取り、判断し、公開する。人は承認だけ。この仕組みを自社で動かしている営業出身者が、あなたの業務で同じものを作ります。本業では美容・食品メーカーや行政の SNS 施策を担当し、社内の AI 導入も進めています。相談は X の DM かメールで受けています。`}
+  title={サイト名}
+  description="営業とプランニングで、売れる形をつくる。求人広告の法人営業とインフルエンサー施策の営業を経て、株式会社REECH で美容・食品メーカーや行政の SNS 施策・PR を担当。AI も自分で作って、毎日の仕事に使っています。"
 >
-  {/* ── 1 ヒーロー ───────────────────────── */}
+  {/* ── 1 ヒーロー（プロフィールの要約） ──────────── */}
   <section class="wrap hero">
-    <p class="section-label">AI導入・業務自動化の仕組みづくり</p>
-    <h1><span class="phrase">毎朝、AIが数字を取り、</span><span class="phrase">判断し、公開する。</span><br />人は承認だけ。</h1>
-    <p class="sub hero-lead">
-      この仕組みを自社で動かしている営業出身者が、あなたの業務で同じものを作ります。
-    </p>
-
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="hero">{CTA文言}</a>
-      <a class="btn btn-sub" href="#実例">自社の実例を見る</a>
-    </div>
-    <p class="faint">
-      {相談の案内}。{メールの案内}（<a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-hero">{メール}</a>）。
-    </p>
-
-    <ul class="hero-proof">
-      <li>
-        <b>{毎朝のジョブ}</b>
-        <small>毎朝、自動で動くジョブ（自社で運用中・{実例の時点} 時点）</small>
-      </li>
-      <li>
-        <b>{現職の数字.案件規模}</b>
-        <small>{現職の数字.説明}（{現職の数字.時点}）</small>
-      </li>
-      <li>
-        <b>{営業の数字.取引社数}</b>
-        <small>求人広告の法人営業での年間取引社数（{営業の数字.時点}）</small>
-      </li>
-      <li>
-        <b>{営業の数字.月次1位}</b>
-        <small>主任未満の社員 約35名の月次粗利ランキングで1位（同）</small>
-      </li>
-    </ul>
-  </section>
-
-  {/* ── 2 引き受ける仕事の型 ───────────────── */}
-  <section class="wrap section" id="型">
-    <p class="section-label">引き受ける仕事</p>
-    <h2>お引き受けするのは、この3つの型です。</h2>
-    <p class="lead">
-      どれも、自社で毎日動かしている形をそのまま持っていきます。あなたの会社の業務に当てはめると、たとえば次のような仕事になります。
-    </p>
-
-    <ol class="types">
-      {仕事の型.map((t) => (
-        <li>
-          <h3>{t.名前}</h3>
-          <p>{t.説明}</p>
-          <p class="types-ex"><span>よくある業務の例</span>{t.よくある業務}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  {/* ── 3 自社で運用中の実例 ───────────────── */}
-  <section class="wrap section section--wide" id="実例">
-    <p class="section-label">自社で運用中の実例</p>
-    <h2>いま、自社で毎朝動いている仕組みです。</h2>
-    <p class="lead">
-      ここに載せているのは受託の実績ではなく、自分の事業で動かしている仕組みです。何が人の手を通らずに動いていて、人は何をしているかを、{実例の時点} 時点の事実で書いています。
-    </p>
-
-    <div class="example">
-      <figure class="diagram">
-        <svg viewBox="0 0 360 560" role="img" aria-labelledby="図の題 図の説明" xmlns="http://www.w3.org/2000/svg">
-          <title id="図の題">自社で毎朝動いている仕組みの流れ</title>
-          <desc id="図の説明">
-            毎朝7時から8時10分に6本のジョブが起動し、数字を取り、今日やる1件を決め、AIが下書きや修正を作り、
-            検査と公開前レビューを通す。情報サイトはそのまま人の手を通らずに公開し、Xの投稿は人がDiscordで「OK」と返したあとに投稿する。
-            結果は毎回Discordに通知が届く。
-          </desc>
-          <defs>
-            <marker id="矢" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L10,5 L0,10 z" class="dg-arrowhead" />
-            </marker>
-          </defs>
-
-          <g class="dg-box">
-            <rect x="10" y="10" width="240" height="58" rx="4" />
-            <rect x="10" y="90" width="240" height="58" rx="4" />
-            <rect x="10" y="170" width="240" height="58" rx="4" />
-            <rect x="10" y="250" width="240" height="58" rx="4" />
-            <rect x="10" y="330" width="240" height="58" rx="4" />
-            <rect x="10" y="420" width="115" height="58" rx="4" />
-            <rect x="135" y="420" width="115" height="58" rx="4" />
-          </g>
-          <rect class="dg-human" x="262" y="330" width="88" height="148" rx="4" />
-          <rect class="dg-note" x="10" y="500" width="340" height="48" rx="4" />
-
-          <g class="dg-t">
-            <text x="24" y="35">1 毎朝 7:00〜8:10 に起動</text>
-            <text x="24" y="115">2 数字を取る</text>
-            <text x="24" y="195">3 今日やる1件を決める</text>
-            <text x="24" y="275">4 AI が下書き・修正を作る</text>
-            <text x="24" y="355">5 検査・公開前レビュー</text>
-            <text x="22" y="445">サイトに公開</text>
-            <text x="147" y="445">X に投稿</text>
-            <text x="306" y="354" text-anchor="middle">人</text>
-          </g>
-          <g class="dg-s">
-            <text x="24" y="56">6本のジョブが順に動く</text>
-            <text x="24" y="136">検索・アクセス・公的データ</text>
-            <text x="24" y="216">対象が無い日は何もしない</text>
-            <text x="24" y="296">投稿案・ページ・画像</text>
-            <text x="24" y="376">通らなければ公開しない</text>
-            <text x="22" y="466">人の手なし</text>
-            <text x="147" y="466">「OK」のあと</text>
-            <text x="306" y="380" text-anchor="middle">Discord で</text>
-            <text x="306" y="398" text-anchor="middle">下書きを読み</text>
-            <text x="306" y="416" text-anchor="middle">「OK」と</text>
-            <text x="306" y="434" text-anchor="middle">返す</text>
-            <text x="180" y="529" text-anchor="middle">結果は毎回、Discord に通知が届く</text>
-          </g>
-
-          <g class="dg-line">
-            <line x1="130" y1="68" x2="130" y2="88" marker-end="url(#矢)" />
-            <line x1="130" y1="148" x2="130" y2="168" marker-end="url(#矢)" />
-            <line x1="130" y1="228" x2="130" y2="248" marker-end="url(#矢)" />
-            <line x1="130" y1="308" x2="130" y2="328" marker-end="url(#矢)" />
-            <polyline points="67,388 67,418" marker-end="url(#矢)" />
-            <polyline points="250,359 260,359" marker-end="url(#矢)" />
-            <polyline points="262,449 252,449" marker-end="url(#矢)" />
-          </g>
-        </svg>
-        <figcaption>
-          流れは2種類あります。情報サイトの修正は、検査とレビューを通ればそのまま公開されます。X の投稿は、人が下書きを読んで「OK」を返したあとにだけ出ます。
-        </figcaption>
-      </figure>
-
-      <ul class="example-facts">
-        {実例.map((e) => (
-          <li>
-            <p class="ef-num">{e.数字}</p>
-            <h3>{e.見出し}</h3>
-            <p>{e.本文}</p>
-          </li>
-        ))}
-        <li>
-          <p class="ef-num">{アプリ数}本</p>
-          <h3>App Store に公開した iOS アプリ</h3>
-          <p>企画から審査の提出、公開後の更新まで1人で通しました。実装は AI エージェントが書き、何を作らないかと、出た物が事実かの確認は私がやっています。</p>
-        </li>
-      </ul>
-    </div>
-
-    <p class="small" style="margin-top:1.5rem">
-      仕組みの中では、役割を持った AI を「実行する役」と「チェックする役」に分けています。作った本人に合格を出させないためです。つくったアプリや情報サイトの中身は、<a href="/works/" data-ga="works_click" data-item="from-example">つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）</a>にまとめています。
-    </p>
-    <div class="btn-row">
-      <a class="btn" href={CTAパス} data-ga="cta_click" data-item="example">{CTA文言}</a>
-    </div>
-  </section>
-
-  {/* ── 4 なぜ営業出身が組むのか ─────────────── */}
-  <section class="wrap section" id="なぜ">
-    <p class="section-label">なぜ営業出身が組むのか</p>
-    <h2>AI 導入がつまずくのは、たいてい技術の手前です。</h2>
-    <p class="lead">
-      つまずく原因の多くは、どの業務の何の数字を動かすのかを、作る前に誰も決めていないことです。エンジニアではなく、営業の現場を知る人間が組む理由はここにあります。
-    </p>
-
-    <div class="contrast" role="table" aria-label="AI 導入のよくある進め方と、このやり方の違い">
-      <div class="contrast-head" role="row">
-        <span role="columnheader">項目</span>
-        <span role="columnheader">よくある進め方</span>
-        <span role="columnheader">このやり方</span>
-      </div>
-      {失敗との対比.map((r) => (
-        <div class="contrast-row" role="row">
-          <span class="c-k" role="rowheader">{r.項目}</span>
-          <span class="c-bad" role="cell"><em>よくある進め方</em>{r.よくある}</span>
-          <span class="c-good" role="cell"><em>このやり方</em>{r.このやり方}</span>
-        </div>
-      ))}
-    </div>
-
-    <p style="margin-top:1.5rem">
-      求人広告の営業では、初めて伺う会社の事業と稼ぎ方を先に調べ、仮説を持って話を聞いてきました。提案を通すには、相手の担当者が追っている目標の数字に合わせる必要があります。AI の仕組みづくりでも、最初にやることは同じです。業務の手順を聞き、どの数字が動けば成功かを決めてから作ります。
-    </p>
-    <p>
-      {勤務先でのAI推進}
-    </p>
-  </section>
-
-  {/* ── 5 経歴 ───────────────────────────── */}
-  <section class="wrap section section--tight" id="経歴">
-    <p class="section-label">経歴</p>
-    <div class="profile-head">
+    <div class="hero-id">
       {/* 写真は 2026-10-12 に本人から受け取った物。胸の社名ロゴが入らない位置で切り抜き、メタデータを消して書き出した */}
       <img
         class="profile-photo"
@@ -230,11 +46,51 @@ const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')
         width="96"
         height="96"
         alt={氏名}
-        loading="lazy"
         decoding="async"
       />
-      <h2>{氏名}</h2>
+      <div>
+        <p class="section-label">営業・プランナー</p>
+        <h1>{氏名}</h1>
+      </div>
     </div>
+    <p class="hero-copy">
+      <span class="phrase">営業とプランニングで、</span><span class="phrase">売れる形をつくる。</span><br />
+      <span class="phrase">AI も自分で作って、</span><span class="phrase">毎日の仕事に使っている。</span>
+    </p>
+    <p class="sub">
+      求人広告の法人営業、インフルエンサー施策の営業を経て、いまは株式会社REECH（クロス・マーケティンググループ）で SNS アカウントプランナーをしています（2026年10月時点）。
+    </p>
+    <nav class="hero-toc" aria-label="このページの目次">
+      <a href="#実績">実績</a>
+      <a href="#経歴">経歴</a>
+      <a href="#できること">今できること</a>
+      <a href="#AI">AI で作っているもの</a>
+    </nav>
+  </section>
+
+  {/* ── 2 実績（数字4つ＋就任） ─────────────── */}
+  <section class="wrap section section--wide" id="実績">
+    <p class="section-label">実績</p>
+    <h2>数字で見る、これまでの仕事</h2>
+    <ul class="proof">
+      {実績の数字.map((n) => (
+        <li>
+          <b>{n.数字}</b>
+          <span class="proof-what">{n.説明}</span>
+          <small>{n.時点}</small>
+        </li>
+      ))}
+    </ul>
+    <p class="faint proof-note">
+      はじめの3つは、求人広告の法人営業で 2024年3月時点の職務経歴書に書いた「直近1年」の実績です。<br />
+      {就任}。
+    </p>
+  </section>
+
+  {/* ── 3 経歴 ───────────────────────────── */}
+  <section class="wrap section" id="経歴">
+    <p class="section-label">経歴</p>
+    <h2>営業から、プランナーへ</h2>
 
     <ol class="career">
       {経歴.map((c) => (
@@ -264,55 +120,70 @@ const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')
         </li>
       ))}
     </ol>
-
-    <p class="career-contact">
-      連絡先: <a href={Xリンク} rel="me noopener" target="_blank">X（{ハンドル}）の DM</a>
-      ／ メール <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-career">{メール}</a>
-    </p>
   </section>
 
-  {/* ── 6 お引き受けしないこと ─────────────── */}
-  <section class="wrap section section--tight" id="範囲">
-    <p class="section-label">お引き受けしないこと</p>
-    <h2>先に、やらないことを書いておきます。</h2>
-    <ul class="nots">
-      {お引き受けしないこと.map((x) => <li>{x}</li>)}
+  {/* ── 4 今できること ─────────────────────── */}
+  <section class="wrap section" id="できること">
+    <p class="section-label">今できること</p>
+    <h2>いま、できること</h2>
+    <ol class="cans">
+      {今できること.map((t) => (
+        <li>
+          <h3>{t.名前}</h3>
+          <p>{t.説明}</p>
+          <p class="cans-basis">{t.裏付け}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {/* ── 5 AI は自分で作っている（裏付け） ─────────── */}
+  <section class="wrap section" id="AI">
+    <p class="section-label">AI は自分で作っている</p>
+    <h2>売る人が道具を作ると、売れる仕組みになる</h2>
+    <p class="lead">
+      何を作り、何を人の確認に残すかを、売る側の感覚で決めています。コードは AI エージェントが書き、何を作らないかと、出てきた物が事実どおりかの確認は自分でやっています。ここにあるのは個人で作って動かしている物で、受託の実績ではありません。
+    </p>
+    <ul class="made">
+      <li>
+        <p class="made-num">{アプリ数}本</p>
+        <h3>App Store に公開した iOS アプリ</h3>
+        <p>企画から審査の提出、公開後の更新まで1人で通しました。</p>
+      </li>
+      <li>
+        <p class="made-num">毎朝 {毎朝のジョブ.数字}</p>
+        <h3>個人で毎朝動かしている仕組み</h3>
+        <p>{毎朝のジョブ.本文}（{実例の時点} 時点）</p>
+      </li>
+      {開発中 && (
+        <li>
+          <p class="made-num">要件定義中</p>
+          <h3>{開発中.名前}</h3>
+          <p>{開発中.副題}</p>
+        </li>
+      )}
     </ul>
   </section>
 
-  {/* ── 7 FAQ ──────────────────────────── */}
-  <section class="wrap section section--tight" id="よくある質問">
-    <p class="section-label">よくある質問</p>
-    <h2>先に答えておきます。</h2>
-    <div class="faq">
-      {FAQ.map((f) => (
-        <details>
-          <summary>{f.q}</summary>
-          <div class="answer" set:html={f.a} />
-        </details>
-      ))}
+  {/* ── 6 つくったもの への導線 ─────────────── */}
+  <section class="wrap section section--tight" id="つくったもの">
+    <p class="section-label">つくったもの</p>
+    <p>
+      アプリ・情報サイト・業務アプリなど、企画から公開まで1人でやった物を、時点つきの数字と一緒にまとめています。
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-sub" href="/works/" data-ga="works_click" data-item="from-top">
+        つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）を見る
+      </a>
     </div>
   </section>
 
-  {/* ── CTA ───────────────────────────── */}
-  <section class="wrap section" id="相談">
-    <div class="cta-final">
-      <h2>まず、手でやっている業務を1つ教えてください。</h2>
-      <p class="small">
-        毎日・毎週、誰かが手で繰り返している作業を1つ挙げてもらえれば、そこから話を始めます。
-      </p>
-      <div class="btn-row">
-        <a class="btn" href={CTAパス} data-ga="cta_click" data-item="footer">{CTA文言}</a>
-      </div>
-      <p class="small">
-        {メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-footer">{メール}</a>
-      </p>
-      <ul>
-        <li>X の DM で受けています。{相談の案内}</li>
-        <li>DM・メールには、手で繰り返している作業を1行書いてください</li>
-        <li>{返信時間}に返信します</li>
-        <li>その場で契約をお願いすることはありません</li>
-      </ul>
-    </div>
+  {/* ── 7 連絡先（一番下だけ） ─────────────── */}
+  <section class="wrap section section--tight" id="連絡先">
+    <p class="section-label">連絡先</p>
+    <ul class="contact">
+      <li>X: <a href={Xリンク} rel="me noopener" target="_blank" data-ga="cta_click" data-item="contact">{ハンドル}</a>（DM）</li>
+      <li>メール: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-contact">{メール}</a></li>
+    </ul>
   </section>
 </Base>

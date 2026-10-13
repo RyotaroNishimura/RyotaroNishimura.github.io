@@ -6,24 +6,25 @@
  * ボタンに JS を足さなくてもクリック率が取れる（GA4 のページ閲覧数で読める・御堂ゲート §5）。
  *
  * 行き先は X のプロフィール（2026-10-12 オーナー回答: 主は X の DM。メールも併記する）。
+ * 2026-10-13 からトップはこのページを経由せず X へ直接リンクしている。古いリンクの受け皿として残す。
  * DM 作成画面への直リンクは数値の user ID が要るので使わず、
  * 「プロフィールのメッセージボタンから」と書いてから移る。
  */
 import Base from '../../layouts/Base.astro';
-import { 相談先URL, 相談の案内, 返信時間, ハンドル, メール, メールリンク, メールの案内 } from '../../config/サイト設定';
+import { 相談先URL, 相談の案内, ハンドル, メール, メールリンク, メールの案内 } from '../../config/サイト設定';
 
 const 行き先 = 相談先URL;
 ---
 
 <Base
   title="X のプロフィールへ移動します"
-  description="相談は X の DM かメールで受けています。X のプロフィールへ移動します。"
+  description="X のプロフィールへ移動します。連絡は X の DM かメールでとれます。"
   noindex={true}
 >
   <div class="wrap doc" style="text-align:center;max-width:32rem">
     <h1>X のプロフィールへ移動します</h1>
     <p>
-      相談は X（{ハンドル}）の DM で受けています。<br />
+      X（{ハンドル}）のプロフィールを開きます。<br />
       {相談の案内}。
     </p>
     <p class="small">
@@ -34,9 +35,6 @@ const 行き先 = 相談先URL;
     </div>
     <p class="small">
       {メールの案内}: <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-go-cta">{メール}</a>
-    </p>
-    <p class="faint">
-      DM・メールには、手で繰り返している作業を1行書いてください。{返信時間}に返信します。
     </p>
     <a class="back-link" href="/">← トップに戻る</a>
   </div>

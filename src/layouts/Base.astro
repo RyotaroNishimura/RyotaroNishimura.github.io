@@ -3,8 +3,7 @@ import '../styles/global.css';
 import {
   サイト略称,
   氏名,
-  CTA文言,
-  CTAパス,
+  肩書き,
   GA測定ID,
   本番ホスト,
   Xリンク,
@@ -25,7 +24,7 @@ const ogImage = new URL('/ogp.png', Astro.site).href;
 const path = Astro.url.pathname;
 const 現在地 = (p: string) => (path === p || path.startsWith(p + '/') ? 'page' : undefined);
 const 年 = new Date().getFullYear();
-/* トップに居るときは再読込させずページ内移動にする（/#実例 のままだとリロードになる） */
+/* トップに居るときは再読込させずページ内移動にする（/#経歴 のままだとリロードになる） */
 const 頭 = path === '/' ? '' : '/';
 ---
 
@@ -158,12 +157,13 @@ const 頭 = path === '/' ? '' : '/';
 
     <header class="site-header">
       <div class="wrap">
-        <a class="site-title" href="/">{氏名}<span>AI導入・業務自動化</span></a>
+        <a class="site-title" href="/">{氏名}<span>{肩書き}</span></a>
+        {/* 2026-10-13: 連絡のボタンはヘッダーに置かない（連絡先はトップの一番下だけ） */}
         <nav class="site-nav" aria-label="サイト内">
-          <a href={`${頭}#実例`}>自社の実例</a>
+          <a href={`${頭}#実績`}>実績</a>
           <a href={`${頭}#経歴`}>経歴</a>
+          <a href={`${頭}#できること`}>今できること</a>
           <a href="/works/" aria-current={現在地('/works')}>つくったもの</a>
-          <a class="nav-cta" href={CTAパス} data-ga="cta_click" data-item="header">{CTA文言}</a>
         </nav>
       </div>
     </header>
@@ -182,7 +182,7 @@ const 頭 = path === '/' ? '' : '/';
           <a class="mail" href={メールリンク} data-ga="cta_click" data-item="mail-site-footer">{メール}</a>
         </nav>
         <p class="faint">
-          {氏名}（{ハンドル}）。このサイトの数字は、時点を添えて一次ソースから取っています。自社で運用中の実例は、受託の実績とは分けて書いています。
+          {氏名}（{ハンドル}）。このサイトの数字は、時点を添えて一次ソースから取っています。個人でつくって動かしている物は、受託の実績とも勤務先の業務とも分けて書いています。
           note でも記事を書いています。
         </p>
         <p class="faint">&copy; {年} {氏名}</p>

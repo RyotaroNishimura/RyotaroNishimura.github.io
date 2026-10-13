@@ -198,7 +198,7 @@ li {
 }
 
 /*
-  トップは 8,500px 以上ある。本文のCTAの間でも入口が要るので、ヘッダーを上に貼り付ける。
+  トップは縦に長いので、節へ戻る目次としてヘッダーを上に貼り付ける。
   モバイルはヘッダーが2段に折れて画面を食うので、固定するのは1段に収まる幅からにする。
 */
 @media (min-width: 46rem) {
@@ -251,35 +251,6 @@ li {
 .site-nav a[aria-current='page'] {
   color: var(--accent);
   text-decoration: underline;
-}
-
-/*
-  全ページに常時ある導線。トップは縦 12,000px 近くあり、
-  本文のCTA（ヒーロー・実績後・依頼範囲・末尾）の間でもここから入れるようにしておく。
-*/
-.nav-cta {
-  background: var(--accent);
-  color: var(--accent-ink) !important;
-  padding: 0 0.9rem;
-  border-radius: var(--radius);
-  font-weight: 700;
-  min-height: 40px;
-}
-
-.nav-cta:hover {
-  background: #0b4a3e;
-  text-decoration: none !important;
-}
-
-/*
-  狭い画面ではヘッダーのCTAを出さない。本文側に6箇所あるので足りる。
-  セレクタを .site-nav .nav-cta にしているのは、.site-nav a（詳細度 0,1,1）の
-  display: inline-flex に .nav-cta（0,1,0）が負けて消えなかったため（375px 実測で確認）。
-*/
-@media (max-width: 34rem) {
-  .site-nav .nav-cta {
-    display: none;
-  }
 }
 
 .site-footer {
@@ -368,40 +339,6 @@ li {
   color: var(--ink-sub);
   max-width: 34rem;
   margin-bottom: 0;
-}
-
-/* 証拠1個。ヒーローの下に、数字だけ横に並べる */
-.hero-proof {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem 2rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
-  list-style: none;
-  padding-left: 0;
-}
-
-.hero-proof li {
-  margin: 0;
-}
-
-.hero-proof b {
-  display: block;
-  font-size: 1.6rem;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-}
-
-.hero-proof b span {
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-left: 0.15em;
-}
-
-.hero-proof small {
-  color: var(--ink-sub);
-  font-size: 0.8125rem;
 }
 
 /* ── 実績 ────────────────────────────── */
@@ -495,88 +432,6 @@ li {
   font-size: 0.75rem;
   color: var(--ink-faint);
   letter-spacing: 0.02em;
-}
-
-.faq {
-  margin-top: 1.25rem;
-  border-top: 1px solid var(--line);
-}
-
-.faq details {
-  border-bottom: 1px solid var(--line);
-}
-
-.faq summary {
-  cursor: pointer;
-  padding: 1rem 0;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 44px;
-  align-items: center;
-}
-
-.faq summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq summary::after {
-  content: '＋';
-  color: var(--accent);
-  flex: none;
-}
-
-.faq details[open] summary::after {
-  content: '−';
-}
-
-.faq .answer {
-  padding-bottom: 1rem;
-  font-size: 0.9375rem;
-  color: var(--ink-sub);
-}
-
-.faq .answer p:last-child {
-  margin-bottom: 0;
-}
-
-/* ── 末尾CTA ─────────────────────────── */
-
-.cta-final {
-  background: var(--bg-sub);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.75rem 1.5rem;
-  margin-top: 1.25rem;
-}
-
-.cta-final h2 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.cta-final ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-  font-size: 0.875rem;
-  color: var(--ink-sub);
-}
-
-.cta-final li {
-  padding-left: 1.25rem;
-  position: relative;
-}
-
-.cta-final li::before {
-  content: '·';
-  position: absolute;
-  left: 0.4rem;
-  color: var(--accent);
-  font-weight: 700;
 }
 
 /* ── 本文ページ（/works/* /process /privacy /legal） ── */
@@ -708,264 +563,199 @@ li {
   }
 }
 
-/* ══ 2026-10-12 AI導入・業務自動化への作り替えで足した部品 ══ */
+/* ══ トップの部品（2026-10-13 営業・プランナーの経歴サイトへ作り替え） ══ */
 
-/* 見出しを語の切れ目でだけ折る（「判断/し」のような途中折れを防ぐ） */
-.hero h1 .phrase {
+/* 文を語の切れ目でだけ折る（「売れる/形」のような途中折れを防ぐ） */
+.phrase {
   display: inline-block;
 }
 
-.hero .hero-lead {
-  font-size: 1.0625rem;
-  color: var(--ink);
-  max-width: 38rem;
-  margin-bottom: 0.25rem;
+/* ── 1 ヒーロー: 顔写真＋氏名 ── */
+.hero-id {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
-/* ── 2 仕事の型（3つ） ───────────────────── */
+.hero-id h1 {
+  margin: 0;
+}
 
-.types {
-  counter-reset: type;
+.hero-id > div {
+  min-width: 0;
+}
+
+.hero-copy {
+  font-size: clamp(1.15rem, 4.6vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+/* ヒーローの目次。連絡先は置かない（ページ内の節へ飛ぶだけ） */
+.hero-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.hero-toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ── 2 実績: 数字4つ。狭い画面は2列、広い画面は4列 ── */
+.proof {
   list-style: none;
   padding: 0;
-  margin: 1.5rem 0 0;
+  margin: 1.25rem 0 0;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
 }
 
-.types > li {
-  counter-increment: type;
+.proof > li {
   background: var(--bg);
-  padding: 1.4rem 1.35rem;
+  padding: 1rem 1rem 1.1rem;
   margin: 0;
+  min-width: 0;
 }
 
-.types h3 {
-  font-size: 1.0625rem;
-  margin-bottom: 0.5rem;
-}
-
-.types h3::before {
-  content: '型' counter(type);
+.proof b {
   display: block;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: clamp(1.3rem, 5vw, 1.75rem);
+  line-height: 1.2;
   color: var(--accent);
-  margin-bottom: 0.25rem;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.35rem;
+  overflow-wrap: anywhere;
 }
 
-.types p {
-  font-size: 0.9375rem;
-  color: var(--ink-sub);
-  margin-bottom: 0.75rem;
-}
-
-.types .types-ex {
-  margin: 0;
-  padding-top: 0.75rem;
-  border-top: 1px dashed var(--line-strong);
-  color: var(--ink);
+.proof-what {
+  display: block;
   font-size: 0.875rem;
+  color: var(--ink);
+  margin-bottom: 0.35rem;
 }
 
-.types-ex span {
+.proof small {
   display: block;
   font-size: 0.75rem;
-  font-weight: 700;
   color: var(--ink-faint);
 }
 
 @media (min-width: 52rem) {
-  .types {
-    grid-template-columns: repeat(3, 1fr);
+  .proof {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-/* ── 3 自社で運用中の実例（図＋数字） ─────────── */
-
-.example {
-  display: grid;
-  gap: 2rem;
-  margin-top: 1.75rem;
-  align-items: start;
+/* 数字の下の小さな注記（就任はここに1行だけ控えめに出す） */
+.proof-note {
+  margin-top: 0.85rem;
 }
 
-@media (min-width: 52rem) {
-  .example {
-    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
-  }
-}
-
-.diagram {
-  margin: 0;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1rem;
-}
-
-.diagram svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 24rem;
-  margin-inline: auto;
-}
-
-.diagram figcaption {
-  font-size: 0.8125rem;
-  color: var(--ink-sub);
-  margin-top: 0.75rem;
-}
-
-.dg-box rect {
-  fill: var(--bg);
-  stroke: var(--line-strong);
-  stroke-width: 1;
-}
-
-.dg-human {
-  fill: var(--accent-faint);
-  stroke: var(--accent);
-  stroke-width: 1.5;
-}
-
-.dg-note {
-  fill: var(--bg-sub);
-  stroke: var(--line);
-}
-
-.dg-t text {
-  fill: var(--ink);
-  font-size: 13.5px;
-  font-weight: 700;
-  font-family: var(--font);
-}
-
-.dg-s text {
-  fill: var(--ink-sub);
-  font-size: 11.5px;
-  font-family: var(--font);
-}
-
-.dg-line line,
-.dg-line polyline {
-  stroke: var(--ink-faint);
-  stroke-width: 1.5;
-  fill: none;
-}
-
-.dg-arrowhead {
-  fill: var(--ink-faint);
-}
-
-.example-facts {
+/* ── 4 今できること（3つ） ── */
+.cans {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 1.25rem 0 0;
   display: grid;
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
 }
 
-.example-facts > li {
+.cans > li {
   background: var(--bg);
-  padding: 1.1rem 1.25rem;
+  padding: 1.3rem 1.25rem;
   margin: 0;
+  min-width: 0;
 }
 
-.example-facts .ef-num {
-  font-size: 1.375rem;
+.cans h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.5rem;
+}
+
+.cans p {
+  font-size: 0.9375rem;
+  color: var(--ink-sub);
+  margin-bottom: 0.6rem;
+}
+
+.cans .cans-basis {
+  margin: 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--line-strong);
+  font-size: 0.8125rem;
+  color: var(--ink-faint);
+}
+
+@media (min-width: 52rem) {
+  .cans {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── 5 AI は自分で作っている ── */
+.made {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.made > li {
+  background: var(--bg);
+  padding: 1rem 1.25rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.made .made-num {
+  font-size: 1.125rem;
   font-weight: 700;
-  line-height: 1.2;
   color: var(--accent);
-  font-variant-numeric: tabular-nums;
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.15rem;
 }
 
-.example-facts h3 {
+.made h3 {
   font-size: 1rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
 }
 
-.example-facts p {
+.made p {
   font-size: 0.9rem;
   color: var(--ink-sub);
   margin: 0;
 }
 
-/* ── 4 よくある進め方との対比 ─────────────────── */
+@media (min-width: 52rem) {
+  .made {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 
-.contrast {
-  margin-top: 1.5rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+/* ── 7 連絡先（事実として置くだけ） ── */
+.contact {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
   font-size: 0.9375rem;
 }
 
-.contrast-head {
-  display: none;
-}
-
-.contrast-row {
-  display: grid;
-  gap: 0.35rem;
-  padding: 1rem 1.1rem;
-  border-top: 1px solid var(--line);
-}
-
-.contrast-head + .contrast-row {
-  border-top: 0;
-}
-
-.contrast .c-k {
-  font-weight: 700;
-  font-size: 0.8125rem;
-  color: var(--accent);
-}
-
-.contrast em {
-  display: block;
-  font-style: normal;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--ink-faint);
-}
-
-.contrast .c-bad {
-  color: var(--ink-sub);
-}
-
-.contrast .c-good {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-@media (min-width: 46rem) {
-  .contrast-head,
-  .contrast-row {
-    display: grid;
-    grid-template-columns: 6rem 1fr 1fr;
-    gap: 1rem;
-    padding: 0.8rem 1.1rem;
-  }
-
-  .contrast-head {
-    background: var(--bg-sub);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .contrast em {
-    display: none;
-  }
-}
-
-/* ── 5 経歴 ─────────────────────────── */
+/* ── 3 経歴 ─────────────────────────── */
 
 .career {
   list-style: none;
@@ -1045,58 +835,13 @@ li {
   margin: 0.2rem 0;
 }
 
-/* 経歴節の下の連絡先 */
-.career-contact {
-  margin-top: 1.5rem;
-  font-size: 0.9375rem;
-  color: var(--ink-sub);
-}
-
 /* メールアドレスは長い1語なので、狭い画面でも横にはみ出さないよう途中で折る */
 a.mail {
   overflow-wrap: anywhere;
 }
 
-/* ── 6 お引き受けしないこと ───────────────── */
-
-.nots {
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.nots li {
-  position: relative;
-  padding-left: 1.6rem;
-  font-size: 0.9375rem;
-  color: var(--ink-sub);
-  margin: 0;
-}
-
-.nots li::before {
-  content: '×';
-  position: absolute;
-  left: 0.2rem;
-  color: var(--ink-faint);
-  font-weight: 700;
-}
-
 /* /process の分担表（dl で組む） */
 .factgrid dd {
-  margin: 0;
-}
-
-/* 経歴の頭の顔写真（2026-10-12 追加）。丸く切り、氏名の左に並べる */
-.profile-head {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.profile-head h2 {
   margin: 0;
 }
 
