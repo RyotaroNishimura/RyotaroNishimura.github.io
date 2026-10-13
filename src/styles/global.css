@@ -1024,6 +1024,27 @@ li {
   margin: 0.15rem 0;
 }
 
+/* 経歴の項目の中の小節（2026-10-13 追加: 勤務先での社内の AI 推進） */
+.career-sub {
+  margin-top: 0.75rem;
+}
+
+.career-sub h4 {
+  font-size: 0.9375rem;
+  margin: 0 0 0.35rem;
+}
+
+.career-sub ul {
+  margin: 0 0 0.5rem;
+  padding-left: 1.2em;
+  font-size: 0.9rem;
+  color: var(--ink-sub);
+}
+
+.career-sub li {
+  margin: 0.2rem 0;
+}
+
 /* 経歴節の下の連絡先 */
 .career-contact {
   margin-top: 1.5rem;

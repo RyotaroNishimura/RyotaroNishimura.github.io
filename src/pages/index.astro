@@ -251,6 +251,15 @@ const アプリ数 = 公開済み一覧.filter((x) => x.種別.startsWith('iOS')
               </ul>
             )}
             {c.数字の注記 && <p class="faint">{c.数字の注記}</p>}
+            {c.小節 && (
+              <div class="career-sub">
+                <h4>{c.小節.見出し}</h4>
+                {c.小節.本文 && <p>{c.小節.本文}</p>}
+                <ul>
+                  {c.小節.箇条.map((x) => <li>{x}</li>)}
+                </ul>
+              </div>
+            )}
           </div>
         </li>
       ))}
