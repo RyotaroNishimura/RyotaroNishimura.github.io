@@ -9,7 +9,7 @@
  * 静岡県の広報戦略アドバイザー就任は、数字の枠に入れず、実績節の下の注記として控えめに1か所だけ出す。
  *
  * 構成（上から）:
- *   1 ヒーロー（プロフィールの要約）→ 2 実績（数字4つ＋就任）→ 3 経歴 → 4 今できること
+ *   1 ヒーロー（プロフィールの要約＋スキルのチップ）→ 2 実績（数字4つ＋就任）→ 3 経歴 → 4 今できること
  *   → 5 AI は自分で作っている（裏付け）→ 6 つくったもの への導線 → 7 連絡先
  * 個人で作って動かしている物は「個人で」と書き、受託の実績とも勤務先の業務とも混ぜない。
  */
@@ -22,8 +22,8 @@ import {
   メール,
   メールリンク,
 } from '../config/サイト設定';
-import { 公開済み一覧, 開発中一覧 } from '../config/実績';
-import { 経歴, 実績の数字, 就任 } from '../config/経歴';
+import { 公開済み一覧, 開発中一覧, 本数の短い表記 } from '../config/実績';
+import { 経歴, 実績の数字, 就任, スキル, スキルの時点 } from '../config/経歴';
 import { 今できること, 実例, 実例の時点 } from '../config/本文';
 
 const 毎朝のジョブ = 実例[0];
@@ -60,6 +60,15 @@ const 開発中 = 開発中一覧[0];
     <p class="sub">
       求人広告の法人営業、インフルエンサー施策の営業を経て、いまは株式会社REECH（クロス・マーケティンググループ）で SNS アカウントプランナーと SaaS 営業をしています（2026年10月時点）。
     </p>
+    {/* スキル（年数つき）。データは 経歴.ts の スキル だけ。CSS だけで折り返す（JS なし） */}
+    <div class="skills">
+      <p class="skills-label">スキル<small>（{スキルの時点}時点）</small></p>
+      <ul class="skill-chips">
+        {スキル.map((s) => (
+          <li><span class="skill-name">{s.項目}</span><span class="skill-years">{s.年数}</span></li>
+        ))}
+      </ul>
+    </div>
     <nav class="hero-toc" aria-label="このページの目次">
       <a href="#実績">実績</a>
       <a href="#経歴">経歴</a>
@@ -178,7 +187,7 @@ const 開発中 = 開発中一覧[0];
     </p>
     <div class="btn-row">
       <a class="btn btn-sub" href="/works/" data-ga="works_click" data-item="from-top">
-        つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）を見る
+        つくったもの（{本数の短い表記}）を見る
       </a>
     </div>
   </section>

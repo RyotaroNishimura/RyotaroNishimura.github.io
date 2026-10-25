@@ -594,6 +594,64 @@ li {
   margin-bottom: 0.75rem;
 }
 
+/* ヒーローのスキル（年数つきのチップ）。狭い画面でも flex-wrap で折り返し、長い項目はチップの中で改行する */
+.skills {
+  margin-top: 1.25rem;
+}
+
+.skills-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-sub);
+  margin: 0 0 0.5rem;
+}
+
+.skills-label small {
+  font-weight: 400;
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+.skill-chips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-chips > li {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.skill-name {
+  padding: 0.3rem 0.65rem 0.3rem 0.8rem;
+  color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.skill-years {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.3rem 0.8rem 0.3rem 0.6rem;
+  background: var(--accent-faint);
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ヒーローの目次。連絡先は置かない（ページ内の節へ飛ぶだけ） */
 .hero-toc {
   display: flex;
@@ -742,8 +800,10 @@ li {
 }
 
 @media (min-width: 52rem) {
+  /* 項目の数だけ列を作る（非公開で項目が減っても、空いた枠が罫線色で埋まらない） */
   .made {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
   }
 }
 

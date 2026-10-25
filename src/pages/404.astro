@@ -5,7 +5,7 @@
  * 戻り先だけ置く（2026-10-13: 連絡のボタンは外した）。検索には出さない。
  */
 import Base from '../layouts/Base.astro';
-import { 公開済み一覧, 開発中一覧 } from '../config/実績';
+import { 本数の短い表記 } from '../config/実績';
 ---
 
 <Base
@@ -23,7 +23,7 @@ import { 公開済み一覧, 開発中一覧 } from '../config/実績';
       <li><a href="/">トップ（プロフィール）</a></li>
       <li><a href="/#実績">実績</a></li>
       <li><a href="/#経歴">経歴</a></li>
-      <li><a href="/works/">つくったもの（公開{公開済み一覧.length}本・開発中{開発中一覧.length}本）</a></li>
+      <li><a href="/works/">つくったもの（{本数の短い表記}）</a></li>
       <li><a href="/#連絡先">連絡先</a></li>
       <li><a href="/legal/">運営者情報</a></li>
     </ul>
