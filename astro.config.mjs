@@ -28,4 +28,11 @@ export default defineConfig({
   },
   // 画像最適化はビルド時のみ。ランタイムJSを増やさない
   image: { service: { entrypoint: 'astro/assets/services/sharp' } },
+  vite: {
+    build: {
+      // Astro 7（Vite 8 / Lightning CSS）は既定でメディアクエリを範囲構文（width>=42rem）に書き換える。
+      // iOS 16.3 以前の Safari は範囲構文を解釈できず段組みが効かなくなるため、従来の min-width 表記を保つ。
+      cssTarget: ['safari14', 'chrome100', 'firefox100', 'edge100'],
+    },
+  },
 });

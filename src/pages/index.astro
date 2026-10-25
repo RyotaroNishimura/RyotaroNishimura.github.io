@@ -33,7 +33,7 @@ const 開発中 = 開発中一覧[0];
 
 <Base
   title={サイト名}
-  description="営業とプランニングで、売れる形をつくる。求人広告の法人営業とインフルエンサー施策の営業を経て、株式会社REECH で美容・食品メーカーや行政の SNS 施策・PR を担当。AI も自分で作って、毎日の仕事に使っています。"
+  description="営業とプランニングで、売れる形をつくる。求人広告の法人営業とインフルエンサー施策の営業を経て、株式会社REECH で美容・食品メーカーや行政の SNS 施策・PR と、SaaS の法人営業を担当。AI も自分で作って、毎日の仕事に使っています。"
 >
   {/* ── 1 ヒーロー（プロフィールの要約） ──────────── */}
   <section class="wrap hero">
@@ -58,7 +58,7 @@ const 開発中 = 開発中一覧[0];
       <span class="phrase">AI も自分で作って、</span><span class="phrase">毎日の仕事に使っている。</span>
     </p>
     <p class="sub">
-      求人広告の法人営業、インフルエンサー施策の営業を経て、いまは株式会社REECH（クロス・マーケティンググループ）で SNS アカウントプランナーをしています（2026年10月時点）。
+      求人広告の法人営業、インフルエンサー施策の営業を経て、いまは株式会社REECH（クロス・マーケティンググループ）で SNS アカウントプランナーと SaaS 営業をしています（2026年10月時点）。
     </p>
     <nav class="hero-toc" aria-label="このページの目次">
       <a href="#実績">実績</a>
@@ -100,7 +100,12 @@ const 開発中 = 開発中一覧[0];
             <h3>
               {c.会社URL ? <a href={c.会社URL} rel="noopener" target="_blank">{c.会社名}</a> : c.会社名}{c.見出し}
             </h3>
-            {c.本文 && c.本文.map((t) => <p>{t}</p>)}
+            {c.本文 && c.本文.map((t) => {
+              const l = c.本文のリンク?.find((x) => t.includes(x.文言));
+              if (!l) return <p>{t}</p>;
+              const [前, ...後] = t.split(l.文言);
+              return <p>{前}<a href={l.URL} rel="noopener" target="_blank">{l.文言}</a>{後.join(l.文言)}</p>;
+            })}
             {c.数字 && (
               <ul class="career-nums">
                 {c.数字.map((n) => <li>{n}</li>)}
